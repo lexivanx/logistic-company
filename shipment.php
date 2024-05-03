@@ -2,9 +2,9 @@
 
 session_start();
 
-require 'includes/db.php';
-require 'includes/shipment-funs.php';
-require 'includes/authentication.php';
+require 'service/db.php';
+require 'service/shipment-funs.php';
+require 'service/authentication.php';
 
 ## Fetch connection to DB
 $db_connection = getDB();
@@ -20,7 +20,7 @@ if (isset($_GET['id'])) {
 }
 
 ?>
-<?php require 'includes/header.php'; ?>
+<?php require 'service/header.php'; ?>
     <?php if ($shipment === null): ?>
         <p class="error-message">No shipments found.</p>
     <?php else: ?>
@@ -49,4 +49,4 @@ if (isset($_GET['id'])) {
         <?php endif; ?>
         
     <?php endif; ?>
-<?php require 'includes/footer.php'; ?>
+<?php require 'service/footer.php'; ?>

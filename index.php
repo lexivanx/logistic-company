@@ -1,7 +1,7 @@
 <?php
 
-require 'includes/db.php';
-require 'includes/authentication.php';
+require 'service/db.php';
+require 'service/authentication.php';
 
 session_start();
 
@@ -18,7 +18,7 @@ if ( $results === false) {
 }
 
 ?>
-<?php require 'includes/header.php'; ?>
+<?php require 'service/header.php'; ?>
 
 <div class="logged-in-info">
 <?php if (checkAuthentication()): ?>
@@ -68,4 +68,4 @@ if ( $results === false) {
 </ul>
 
 <?php endif; ?>
-<?php require 'includes/footer.php'; ?>
+<?php require 'service/footer.php'; ?>

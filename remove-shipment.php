@@ -1,9 +1,9 @@
 <?php
 
-require 'includes/db.php';
-require 'includes/shipment-funs.php';
-require 'includes/http.php';
-require 'includes/authentication.php';
+require 'service/db.php';
+require 'service/shipment-funs.php';
+require 'service/http.php';
+require 'service/authentication.php';
 
 session_start();
 
@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 ?>
 
-<?php require 'includes/header.php'; ?>
+<?php require 'service/header.php'; ?>
 
 <h4> Remove shipment </h4>
 
@@ -86,4 +86,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <a href="shipment.php?id=<?= $shipment['id']; ?>">Cancel</a>
 </form>
 
-<?php require 'includes/footer.php'; ?>
+<?php require 'service/footer.php'; ?>

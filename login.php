@@ -1,8 +1,8 @@
 <?php
 
-require 'includes/http.php';
-require 'classes/User.php';
-require 'includes/db.php';
+require 'model/User.php';
+require 'service/http.php';
+require 'service/db.php';
 
 session_start();
 
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 ?>
 
-<?php require 'includes/header.php'; ?>
+<?php require 'service/header.php'; ?>
 
 <h4> User login </h4>
 
@@ -58,4 +58,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 </form>
 
-<?php require 'includes/footer.php'; ?>
+<?php require 'service/footer.php'; ?>

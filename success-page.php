@@ -1,5 +1,5 @@
-<?php require 'includes/header.php'; ?>
+<?php require 'service/header.php'; ?>
 
 <p class="success-message"> <strong> Registration successful! </strong> </p>
 
-<?php require 'includes/footer.php'; ?>
+<?php require 'service/footer.php'; ?>
