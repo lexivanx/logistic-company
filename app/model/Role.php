@@ -9,6 +9,10 @@ class Role {
         $this->id = $id;
         $this->roleName = $roleName;
     }
+
+    public function getRoleName() {
+        return $this->roleName;
+    }
 }
 
 ?>

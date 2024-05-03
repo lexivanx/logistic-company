@@ -2,6 +2,7 @@
 
 require __DIR__ . '/../app/config/db.php';
 require __DIR__ . '/../app/service/authentication.php';
+require __DIR__ . '/../app/model/User.php';
 
 session_start();
 
@@ -48,9 +49,13 @@ if ( $results === false) {
         <li>
             <shipment>
                 <h3>
+                <?php if (checkAuthentication() && (User::get_role($_SESSION['user_id']) == 'admin' || User::get_role($_SESSION['user_id']) == 'employee')): ?>
                     <a href ="/logistic-company/app/view/shipment.php?id=<?= $shipment['id']; ?>">
                         <?= htmlspecialchars($shipment['title'], ENT_QUOTES, 'UTF-8'); ?>
                     </a>
+                <?php else: ?>
+                    <?= htmlspecialchars($shipment['title'], ENT_QUOTES, 'UTF-8'); ?>
+                <?php endif; ?>
                 </h3>
                 <p>
                     <?= htmlspecialchars($shipment['body'], ENT_QUOTES, 'UTF-8'); ?>

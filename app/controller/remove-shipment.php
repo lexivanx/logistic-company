@@ -4,10 +4,12 @@ require  __DIR__ . '/../config/db.php';
 require  __DIR__ . '/../service/shipment-funs.php';
 require  __DIR__ . '/../service/http.php';
 require  __DIR__ . '/../service/authentication.php';
+require __DIR__ . '/../model/User.php';
 
 session_start();
 
-if (!checkAuthentication()) {
+if (!checkAuthentication() || !(User::get_role($_SESSION['user_id']) == 'admin' || User::get_role($_SESSION['user_id']) == 'employee')) {
+    redirectToPath('/logistic-company/public/index.php');
     die("You don't have permission to edit or remove");
 }
 

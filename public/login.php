@@ -19,6 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ## Set session variables
         $_SESSION['is_logged_in'] = true;
         $_SESSION['username'] = $_POST['username'];
+        ## save user id as variable
+        $_SESSION['user_id'] = User::getUserId($_POST['username'], $db_connection);
 
         redirectToPath('/logistic-company/public/index.php');
 
