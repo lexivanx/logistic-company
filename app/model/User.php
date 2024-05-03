@@ -2,9 +2,31 @@
 
 class User{
 
-    public $id;
-    public $username;
-    public $password;
+    private $id;
+    private $username;
+    private $password;
+    private $address; // Address object
+    private $role; // Role object
+    private $office; // Office object
+    // Office: for employees - where they work, for customers - default pickup office
+
+    public function __construct($id, $username, $password) {
+        $this->id = $id;
+        $this->username = $username;
+        $this->password = $password;
+    }
+
+    public function get_id() {
+        return $this->id;
+    }
+
+    public function get_username() {
+        return $this->username;
+    }
+
+    public function get_password() {
+        return $this->password;
+    }
 
     ### Return true if user and pass are correct
     public static function userAuth($username, $password, $db_connection) {
