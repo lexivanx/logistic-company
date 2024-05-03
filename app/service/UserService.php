@@ -2,54 +2,7 @@
 
 require __DIR__ . '/../config/db.php';
 
-class User{
-
-    private $id;
-    private $username;
-    private $password;
-    private $address; // Address object
-    private $role; // Role object
-    private $office; // Office object
-    // Office: for employees - where they work, for customers - default pickup office
-
-    public function __construct($username, $password, $address, $role, $office) {
-        $this->id = null;
-        $this->username = $username;
-        $this->password = $password;
-        $this->address = $address;
-        $this->role = $role;
-        $this->office = $office;
-    }
-
-    public function __construct($username, $password, $address, $role) {
-        $this->id = null;
-        $this->username = $username;
-        $this->password = $password;
-        $this->address = $address;
-        $this->role = $role;
-        $this->office = null;
-    }
-
-    public function __construct($username, $password, $role) {
-        $this->id = null;
-        $this->username = $username;
-        $this->password = $password;
-        $this->address = null;
-        $this->role = $role;
-        $this->office = null;
-    }
-
-    public function get_id() {
-        return $this->id;
-    }
-
-    public function get_username() {
-        return $this->username;
-    }
-
-    public function get_password() {
-        return $this->password;
-    }
+class UserService {
 
     public static function getUserId($username, $db_connection) {
         $conn = getDB();

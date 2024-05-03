@@ -4,7 +4,7 @@ require __DIR__ . '/../config/db.php';
 
 class AddressService {
 
-    public function getAddress($id) {
+    public static function getAddress($id) {
         $conn = getDB();
         $sql = "SELECT * FROM address WHERE id=?";
         $stmt = mysqli_prepare($conn, $sql);
@@ -17,7 +17,7 @@ class AddressService {
         return $address;
     }
 
-    public function getAllAddresses() {
+    public static function getAllAddresses() {
         $conn = getDB();
         $sql = "SELECT * FROM address";
         $result = mysqli_query($conn, $sql);
@@ -26,7 +26,7 @@ class AddressService {
         return $addresses;
     }
 
-    public function createAddress($location_type, $country, $city, $street, $number) {
+    public static function createAddress($location_type, $country, $city, $street, $number) {
         $conn = getDB();
         $sql = "INSERT INTO address (location_type, country, city, street, number) VALUES (?, ?, ?, ?, ?)";
         $stmt = mysqli_prepare($conn, $sql);
@@ -37,7 +37,7 @@ class AddressService {
         return $success;
     }
 
-    public function updateAddress($id, $location_type, $country, $city, $street, $number) {
+    public static function updateAddress($id, $location_type, $country, $city, $street, $number) {
         $conn = getDB();
         $sql = "UPDATE address SET location_type=?, country=?, city=?, street=?, number=? WHERE id=?";
         $stmt = mysqli_prepare($conn, $sql);
@@ -48,7 +48,7 @@ class AddressService {
         return $success;
     }
 
-    public function deleteAddress($id) {
+    public static function deleteAddress($id) {
         $conn = getDB();
         $sql = "DELETE FROM address WHERE id=?";
         $stmt = mysqli_prepare($conn, $sql);

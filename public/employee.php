@@ -2,7 +2,7 @@
 
 require __DIR__ . '/../app/config/db.php';
 require __DIR__ . '/../app/service/authentication.php';
-require __DIR__ . '/../controller/AddressController.php';
+require __DIR__ . '/../controller/AddressController.php'; // directly services?
 require __DIR__ . '/../app/model/User.php';
 
 session_start();
