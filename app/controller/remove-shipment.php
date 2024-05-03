@@ -1,9 +1,9 @@
 <?php
 
-require 'service/db.php';
-require 'service/shipment-funs.php';
-require 'service/http.php';
-require 'service/authentication.php';
+require  __DIR__ . '../config/db.php';
+require  __DIR__ . '../service/shipment-funs.php';
+require  __DIR__ . '../service/http.php';
+require  __DIR__ . '../service/authentication.php';
 
 session_start();
 
@@ -61,7 +61,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (mysqli_stmt_execute($prepared_query)) {
 
             # Redirect to shipment page
-            redirectToPath("/logistic-company" . "/index.php");
+            redirectToPath("/logistic-company/public" . "/index.php");
             
         } else {
 
@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 ?>
 
-<?php require 'service/header.php'; ?>
+<?php require  __DIR__ . '../view/header.php'; ?>
 
 <h4> Remove shipment </h4>
 
@@ -83,7 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <button>Remove</button>
 
-    <a href="shipment.php?id=<?= $shipment['id']; ?>">Cancel</a>
+    <a href="/logistic-company/app/view/shipment.php?id=<?= $shipment['id']; ?>">Cancel</a>
 </form>
 
-<?php require 'service/footer.php'; ?>
+<?php require  __DIR__ . '../view/footer.php'; ?>

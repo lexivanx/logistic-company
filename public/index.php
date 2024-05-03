@@ -1,7 +1,7 @@
 <?php
 
-require 'service/db.php';
-require 'service/authentication.php';
+require __DIR__ . '/../app/config/db.php';
+require __DIR__ . '/../app/service/authentication.php';
 
 session_start();
 
@@ -18,15 +18,15 @@ if ( $results === false) {
 }
 
 ?>
-<?php require 'service/header.php'; ?>
+<?php require __DIR__ . '/../app/view/header.php'; ?>
 
 <div class="logged-in-info">
 <?php if (checkAuthentication()): ?>
 
     <p> Currently logged in as: <strong> <?php echo $_SESSION['username']; ?> </strong> </p>
-        <a href="logout.php">Logout</a>
+        <a href="/logistic-company/app/service/logout.php">Logout</a>
     <p>
-        <a href="create-shipment.php">Create shipment</a>
+        <a href="/logistic-company/app/controller/create-shipment.php">Create shipment</a>
     </p>
 
 <?php else: ?>
@@ -48,7 +48,7 @@ if ( $results === false) {
         <li>
             <shipment>
                 <h3>
-                    <a href ="shipment.php?id=<?= $shipment['id']; ?>">
+                    <a href ="/logistic-company/app/view/shipment.php?id=<?= $shipment['id']; ?>">
                         <?= htmlspecialchars($shipment['title'], ENT_QUOTES, 'UTF-8'); ?>
                     </a>
                 </h3>
@@ -68,4 +68,4 @@ if ( $results === false) {
 </ul>
 
 <?php endif; ?>
-<?php require 'service/footer.php'; ?>
+<?php require  __DIR__ . '../app/view/footer.php'; ?>

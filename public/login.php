@@ -1,8 +1,8 @@
 <?php
 
-require 'model/User.php';
-require 'service/http.php';
-require 'service/db.php';
+require  __DIR__ . '../app/model/User.php';
+require  __DIR__ . '../app/service/http.php';
+require  __DIR__ . '../app/config/db.php';
 
 session_start();
 
@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['is_logged_in'] = true;
         $_SESSION['username'] = $_POST['username'];
 
-        redirectToPath('/logistic-company/index.php');
+        redirectToPath('/logistic-company/public/index.php');
 
     } else {
 
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 ?>
 
-<?php require 'service/header.php'; ?>
+<?php require  __DIR__ . '../app/view/header.php'; ?>
 
 <h4> User login </h4>
 
@@ -58,4 +58,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 </form>
 
-<?php require 'service/footer.php'; ?>
+<?php require  __DIR__ . '../app/view/footer.php'; ?>

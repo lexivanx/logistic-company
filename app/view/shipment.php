@@ -2,9 +2,9 @@
 
 session_start();
 
-require 'service/db.php';
-require 'service/shipment-funs.php';
-require 'service/authentication.php';
+require __DIR__ . '../config/db.php';
+require __DIR__ . '../service/shipment-funs.php';
+require __DIR__ . '../service/authentication.php';
 
 ## Fetch connection to DB
 $db_connection = getDB();
@@ -20,7 +20,7 @@ if (isset($_GET['id'])) {
 }
 
 ?>
-<?php require 'service/header.php'; ?>
+<?php require __DIR__ . '../view/header.php'; ?>
     <?php if ($shipment === null): ?>
         <p class="error-message">No shipments found.</p>
     <?php else: ?>
@@ -36,8 +36,8 @@ if (isset($_GET['id'])) {
         <?php if (checkAuthentication()): ?>
 
             <?php if ($_SESSION['username'] == "admin" || $_SESSION['username'] == $shipment['created_by']): ?>
-                <a href="edit-shipment.php?id=<?= $shipment['id']; ?>" class="edit-link">Edit</a>
-                <a href="remove-shipment.php?id=<?= $shipment['id']; ?>" class="delete-link">Delete</a>
+                <a href="../controller/edit-shipment.php?id=<?= $shipment['id']; ?>" class="edit-link">Edit</a>
+                <a href="../controller/remove-shipment.php?id=<?= $shipment['id']; ?>" class="delete-link">Delete</a>
             <?php else: ?>
                 <br>
                 <p><em>Can't edit or remove!</em></p>
@@ -49,4 +49,4 @@ if (isset($_GET['id'])) {
         <?php endif; ?>
         
     <?php endif; ?>
-<?php require 'service/footer.php'; ?>
+<?php require __DIR__ . '../view/footer.php'; ?>

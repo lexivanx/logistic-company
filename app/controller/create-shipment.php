@@ -1,9 +1,9 @@
 <?php 
 
-require 'service/db.php';
-require 'service/shipment-funs.php';
-require 'service/http.php';
-require 'service/authentication.php';
+require  __DIR__ . '../config/db.php';
+require  __DIR__ . '../service/shipment-funs.php';
+require  __DIR__ . '../service/http.php';
+require  __DIR__ . '../service/authentication.php';
 
 session_start();
 
@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $id = mysqli_insert_id($db_connection);
 
                 # Redirect to shipment page
-                redirectToPath("/logistic-company" . "/shipment.php?id=$id");
+                redirectToPath("/logistic-company/app/view" . "/shipment.php?id=$id");
 
             } else {
 
@@ -65,10 +65,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-<?php require 'service/header.php'; ?>
+<?php require  __DIR__ . '../view/header.php'; ?>
 
 <h4> Create a new shipment </h4>
 
-<?php require 'service/shipment.php'; ?>
+<?php require  __DIR__ . '../view/shipment.php'; ?>
 
-<?php require 'service/footer.php'; ?>
+<?php require  __DIR__ . '../view/footer.php'; ?>

@@ -1,6 +1,6 @@
 <?php
 
-require 'service/http.php';
+require 'http.php';
 
 session_start();
 
@@ -17,6 +17,6 @@ if (ini_get("session.use_cookies")) {
 
 session_destroy();
 
-redirectToPath('/logistic-company/index.php');
+redirectToPath('/logistic-company/public/index.php');
 
 ?>
