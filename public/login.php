@@ -1,8 +1,8 @@
 <?php
 
-require  __DIR__ . '../app/model/User.php';
-require  __DIR__ . '../app/service/http.php';
-require  __DIR__ . '../app/config/db.php';
+require  __DIR__ . '/../app/model/User.php';
+require  __DIR__ . '/../app/service/http.php';
+require  __DIR__ . '/../app/config/db.php';
 
 session_start();
 
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 ?>
 
-<?php require  __DIR__ . '../app/view/header.php'; ?>
+<?php require  __DIR__ . '/../app/view/header.php'; ?>
 
 <h4> User login </h4>
 
@@ -58,4 +58,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 </form>
 
-<?php require  __DIR__ . '../app/view/footer.php'; ?>
+<?php require  __DIR__ . '/../app/view/footer.php'; ?>

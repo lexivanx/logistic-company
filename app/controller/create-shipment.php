@@ -1,9 +1,9 @@
 <?php 
 
-require  __DIR__ . '../config/db.php';
-require  __DIR__ . '../service/shipment-funs.php';
-require  __DIR__ . '../service/http.php';
-require  __DIR__ . '../service/authentication.php';
+require  __DIR__ . '/../config/db.php';
+require  __DIR__ . '/../service/shipment-funs.php';
+require  __DIR__ . '/../service/http.php';
+require  __DIR__ . '/../service/authentication.php';
 
 session_start();
 
@@ -65,10 +65,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-<?php require  __DIR__ . '../view/header.php'; ?>
+<?php require  __DIR__ . '/../view/header.php'; ?>
 
 <h4> Create a new shipment </h4>
 
-<?php require  __DIR__ . '../view/shipment.php'; ?>
+<?php require  __DIR__ . '/../view/shipment.php'; ?>
 
-<?php require  __DIR__ . '../view/footer.php'; ?>
+<?php require  __DIR__ . '/../view/footer.php'; ?>

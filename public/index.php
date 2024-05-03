@@ -24,7 +24,7 @@ if ( $results === false) {
 <?php if (checkAuthentication()): ?>
 
     <p> Currently logged in as: <strong> <?php echo $_SESSION['username']; ?> </strong> </p>
-        <a href="/logistic-company/app/service/logout.php">Logout</a>
+        <a href="/logistic-company/app/controller/logout.php">Logout</a>
     <p>
         <a href="/logistic-company/app/controller/create-shipment.php">Create shipment</a>
     </p>
@@ -68,4 +68,4 @@ if ( $results === false) {
 </ul>
 
 <?php endif; ?>
-<?php require  __DIR__ . '../app/view/footer.php'; ?>
+<?php require  __DIR__ . '/../app/view/footer.php'; ?>

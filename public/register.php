@@ -1,8 +1,8 @@
 <?php
 
-require __DIR__ . '../app/model/User.php';
-require __DIR__ . '../app/service/http.php';
-require __DIR__ . '../app/config/db.php';
+require __DIR__ . '/../app/model/User.php';
+require __DIR__ . '/../app/service/http.php';
+require __DIR__ . '/../app/config/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 if (mysqli_stmt_execute($prepared_query)) {
                     // Redirect or show success message
-                    header("Location: ../app/view/success-page.php"); // Redirect to a success page
+                    header("Location: /logistic-company/app/view/success-page.php");
                     exit;
                 } else {
                     $error = mysqli_stmt_error($prepared_query);
@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 ?>
 
-<?php require  __DIR__ . '../app/view/header.php'; ?>
+<?php require  __DIR__ . '/../app/view/header.php'; ?>
 
 <h4> User registration </h4>
 
@@ -84,4 +84,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 </form>
 
-<?php require  __DIR__ . '../app/view/footer.php'; ?>
+<?php require  __DIR__ . '/../app/view/footer.php'; ?>
