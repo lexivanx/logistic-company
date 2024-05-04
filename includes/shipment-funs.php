@@ -24,21 +24,21 @@ function getShipment($db_connection, $id, $columns = '*') {
 
 
 ### Function to validate if article fields are empty
-function getShipmentErrs($statusShipment, $fromAddressId, $toAddressId, $exactPrice) {
+function getShipmentErrs($fromAddressId, $toAddressId, $shipWeight, $passengerAmount) {
     $errors = [];
 
     // Example checks for required fields
-    if (empty($statusShipment)) {
-        $errors[] = "Status of the shipment is required";
-    }
     if (empty($fromAddressId)) {
         $errors[] = "From address is required";
     }
     if (empty($toAddressId)) {
         $errors[] = "To address is required";
     }
-    if ($exactPrice === null) {
-        $errors[] = "Exact price is required";
+    if ($shipWeight != '' && $passengerAmount != '') {
+        $errors[] = "Can't set both ship weight and passenger amount!";
+    }
+    if ($shipWeight == '' && $passengerAmount == '') {
+        $errors[] = "At least ship weight OR passenger amount required!";
     }
 
     return $errors;
