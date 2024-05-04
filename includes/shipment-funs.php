@@ -34,10 +34,13 @@ function getShipmentErrs($fromAddressId, $toAddressId, $shipWeight, $passengerAm
     if (empty($toAddressId)) {
         $errors[] = "To address is required";
     }
-    if ($shipWeight != '' && $passengerAmount != '') {
+    if ($shipWeight != 0.00 && $passengerAmount != 0) {
         $errors[] = "Can't set both ship weight and passenger amount!";
     }
     if ($shipWeight == '' && $passengerAmount == '') {
+        $errors[] = "At least ship weight OR passenger amount required!";
+    }
+    if ($shipWeight == 0.00 && $passengerAmount == 0) {
         $errors[] = "At least ship weight OR passenger amount required!";
     }
 

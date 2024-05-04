@@ -91,18 +91,6 @@ header nav a:hover {
     text-decoration: underline; 
 }
 
-form {
-    max-width: 600px;
-    margin: 20px auto;
-    padding: 20px;
-    background: #f9f9f9;
-    border: 1px solid #ddd;
-}
-
-form div {
-    margin-bottom: 10px;
-}
-
 input[type="text"],
 input[type="password"],
 button[type="submit"] {
@@ -175,4 +163,108 @@ h4 {
     margin: 20px 0;
     color: #333;
     font-size: 1.4em;
+}
+
+/* General Text Styling */
+.shipment-details {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+}
+.shipment-details p, .shipment-details label {
+    color: #555; /* Gray text for better readability, consistent with the form */
+    font-size: 1em; /* Ensuring text size is consistent */
+    margin-bottom: 8px; /* Uniform spacing between lines */
+}
+
+/* Styling for Div Containers in Shipment Details */
+.shipment-details div {
+    background: #f9f9f9; /* Light gray background, similar to form background */
+    padding: 10px; /* Padding for spacing inside divs */
+    margin-bottom: 10px; /* Margin for spacing between divs */
+    border: 1px solid #ddd; /* Subtle border to match the form style */
+}
+
+/* Enhancements to Form and Button Elements */
+.shipment-details form {
+    padding: 20px;
+    background: #f9f9f9; /* Consistent background with input forms */
+    border: 1px solid #ddd; /* Consistent border styling */
+}
+
+.shipment-details button[type="submit"], .shipment-details a {
+    background: #5cb85c; /* Green background for buttons and links */
+    color: white; /* White text for readability */
+    text-decoration: none; /* Removing underline from links */
+    padding: 10px 15px; /* Adequate padding for clickability */
+    display: inline-block; /* Ensures that elements are properly aligned inline */
+    border: none; /* No border for a cleaner look */
+    cursor: pointer; /* Cursor to indicate clickable */
+    margin-right: 10px; /* Space between buttons and links */
+}
+
+.shipment-details button[type="submit"]:hover, .shipment-details a:hover {
+    background: #449d44; /* Darker green on hover for better user feedback */
+}
+
+/* Error Message Styling */
+.shipment-details .error-message {
+    color: #cc0000; /* Red color for errors */
+    text-align: center; /* Centering error messages */
+    margin: 10px 0; /* Spacing around the message */
+}
+
+/* Styling Links as Buttons for Consistency */
+.shipment-details a.edit-link, .shipment-details a.delete-link {
+    background: #f0ad4e; /* Orange background for edit links */
+    padding: 10px 15px; /* Uniform padding */
+}
+
+.shipment-details a.delete-link {
+    background: #d9534f; /* Red background for delete links */
+}
+
+.cancel-link {
+    display: block;             /* Use block to ensure it fills the container */
+    width: 100%;                /* Ensure it attempts to fill the container */
+    padding: 12px;              /* Match padding of the button, adjust as needed */
+    background-color: #d9534f;  /* Red background, same as previous */
+    color: white;               /* White text */
+    text-align: center;         /* Center the text */
+    text-decoration: none;      /* No underline */
+    border: none;               /* No border unless your button has one */
+    border-radius: 4px;         /* Match the button's border-radius */
+    font-size: 16px;  
+}
+
+a.cancel-link {
+    background: #e2534e; /* Red background for delete links */
+}
+
+a.cancel-link:hover {
+    background: #d30e07; /* Red background for delete links */
+}
+
+button.light-green-hover:hover {
+    background: #449d44; /* Darker green on hover for better user feedback */
+}
+
+.button-container {
+    width: 90%; /* Adjust based on your layout */
+    margin: auto; /* Centering the button */
+}
+
+/* Handling Display of Elements on Hover */
+.shipment-details article:hover a.edit-link,
+.shipment-details article:hover a.delete-link {
+    display: inline; /* Ensure links are visible on hover */
+}
+
+/* Adjusting Header Elements for Consistency */
+.shipment-details h3 {
+    color: #333; /* Dark gray for headers */
+    font-size: 1.4em; /* Slightly larger font size for headers */
+    margin-bottom: 10px; /* Space below headers */
 }

@@ -5,7 +5,7 @@
         <?php } ?>
     </ul>
 <?php endif; ?>
-
+<div class="shipment-details">
 <form method="post">
     <?php if ($shipment): ?>
             <p>Shipment ID: <?= $shipment['id']; ?></p>
@@ -23,11 +23,11 @@
         <input type="number" name="passenger_amount" id="passenger_amount" value="<?= htmlspecialchars($passengerAmount, ENT_QUOTES, 'UTF-8'); ?>">
     </div>
     <div>
-        <label for="dateSent">Date Sent:</label>
+        <label for="dateSent">Date sent:</label>
         <input type="datetime-local" name="date_sent" id="date_sent" value="<?= htmlspecialchars($dateSent, ENT_QUOTES, 'UTF-8'); ?>">
     </div>
     <div>
-        <p>Date received: <?php if ($dateReceived) { echo htmlspecialchars($dateReceived, ENT_QUOTES, 'UTF-8'); } else { echo "Not received yet"; } ?></p>
+        <p>Date arrived: <?php if ($dateReceived) { echo htmlspecialchars($dateReceived, ENT_QUOTES, 'UTF-8'); } else { echo "Not received yet"; } ?></p>
     </div>
     <div>
         <label for="deliverFromUserId">Deliver From User ID:</label>
@@ -64,9 +64,11 @@
         <input type="checkbox" name="is_paid" id="is_paid" <?= $isPaid ? 'checked' : ''; ?>>
     </div>
     <button type="submit">Submit</button>
-    <?php if ($shipment): ?>
-        <a href="/logistic-company/views/shipment.php?id=<?= $shipment['id']; ?>">Cancel</a>
-    <?php else: ?>
-        <a href="/logistic-company/index.php">Cancel</a>
-    <?php endif; ?>
+    
 </form>
+    <?php if ($shipment): ?>
+        <a class="cancel-link" href="/logistic-company/views/shipment.php?id=<?= $shipment['id']; ?>">Cancel</a>
+    <?php else: ?>
+        <a class="cancel-link" href="/logistic-company/index.php">Cancel</a>
+    <?php endif; ?>
+</div>

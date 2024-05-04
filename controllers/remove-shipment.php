@@ -59,8 +59,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <form method="post">
     <p>Are you sure you want to remove this shipment?</p>
-    <button type="submit">Remove</button>
-    <a href="/logistic-company/views/shipment.php?id=<?= $id; ?>">Cancel</a>
+    <button class="light-green-hover" type="submit">Remove</button>
 </form>
-
+<br>
+<div class="button-container">
+<a class="cancel-link" href="/logistic-company/views/shipment.php?id=<?= $id; ?>">Cancel</a>
+</div>
 <?php require '../includes/footer.php'; ?>
