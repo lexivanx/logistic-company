@@ -1,9 +1,9 @@
 <?php 
 
-require '/logistic-company/app/config/db.php';
-require '/logistic-company/app/service/ShipmentService.php';
-require '/logistic-company/app/service/http.php';
-require '/logistic-company/app/service/authentication.php';
+require 'includes/db.php';
+require 'includes/article-funs.php';
+require 'includes/http.php';
+require 'includes/authentication.php';
 
 session_start();
 
@@ -23,14 +23,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $time_of = $_POST['time_of'];
     $created_by = $_SESSION['username'];
 
-    $errors = ShipmentService::getShipmentErrs($title, $body, $time_of);
+    $errors = getArticleErrs($title, $body, $time_of);
 
     ## Check for errors in form
     if(empty($errors)) {
         ## Fetch connection to DB
         $db_connection = getDB();
 
-        $prepared_query = mysqli_prepare($db_connection, "INSERT INTO shipment (title, body, time_of, created_by) VALUES (?, ?, ?, ?)");
+        $prepared_query = mysqli_prepare($db_connection, "INSERT INTO article (title, body, time_of, created_by) VALUES (?, ?, ?, ?)");
 
         ## Check for error in query
         if ( $prepared_query === false) {
@@ -51,8 +51,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 # Fetch id of new entry
                 $id = mysqli_insert_id($db_connection);
 
-                # Redirect to shipment page
-                redirectToPath("/logistic-company/app/view" . "/shipment.php?id=$id");
+                # Redirect to article page
+                redirectToPath("/cms" . "/article.php?id=$id");
 
             } else {
 
@@ -65,10 +65,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-<?php require '/logistic-company/app/view/header.php'; ?>
+<?php require 'includes/header.php'; ?>
 
-<h4> Create a new shipment </h4>
+<h4> Create a new article </h4>
 
-<?php require '/logistic-company/app/view/shipment.php'; ?>
+<?php require 'includes/article.php'; ?>
 
-<?php require '/logistic-company/app/view/footer.php'; ?>
+<?php require 'includes/footer.php'; ?>

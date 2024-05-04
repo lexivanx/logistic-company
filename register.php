@@ -1,7 +1,8 @@
 <?php
 
-require '/logistic-company/app/service/http.php';
-require '/logistic-company/app/config/db.php';
+require 'includes/http.php';
+require 'classes/User.php';
+require 'includes/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -42,9 +43,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 // Bind and execute
                 mysqli_stmt_bind_param($prepared_query, "ss", $username, $hashed_password);
 
+                // Redirect or show success message
                 if (mysqli_stmt_execute($prepared_query)) {
-                    // Redirect or show success message
-                    header("Location: /logistic-company/app/view/success-page.php");
+                    // add an entry into role table with role_name 'customer' and id the newly created user id
+                    $user_id = mysqli_insert_id($db_connection);
+                    $role_query = mysqli_prepare($db_connection, "INSERT INTO role (role_name, user_id) VALUES ('customer', ?)");
+                    mysqli_stmt_bind_param($role_query, "i", $user_id);
+                    mysqli_stmt_execute($role_query);
+                    header("Location: success-page.php"); // Redirect to a success page
                     exit;
                 } else {
                     $error = mysqli_stmt_error($prepared_query);
@@ -57,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 ?>
 
-<?php require '/logistic-company/app/view/header.php'; ?>
+<?php require 'includes/header.php'; ?>
 
 <h4> User registration </h4>
 
@@ -83,4 +89,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 </form>
 
-<?php require '/logistic-company/app/view/footer.php'; ?>
+<?php require 'includes/footer.php'; ?>

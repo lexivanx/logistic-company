@@ -1,8 +1,8 @@
 <?php
 
-require '/logistic-company/app/service/UserService.php';
-require '/logistic-company/app/service/http.php';
-require '/logistic-company/app/config/db.php';
+require 'includes/http.php';
+require 'classes/User.php';
+require 'includes/db.php';
 
 session_start();
 
@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     ## Fetch connection to DB
     $db_connection = getDB();
 
-    if(UserService::userAuth($_POST['username'], $_POST['password'], $db_connection)) {
+    if(User::userAuth($_POST['username'], $_POST['password'], $db_connection)) {
 
         ## Prevent session fixation
         session_regenerate_id(true);
@@ -19,11 +19,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ## Set session variables
         $_SESSION['is_logged_in'] = true;
         $_SESSION['username'] = $_POST['username'];
-        ## save user id and role as session variables
-        $_SESSION['user_id'] = UserService::getUserId($_POST['username'], $db_connection);
-        $_SESSION['role'] = UserService::get_role($_SESSION['user_id']);
+        // Get the user id
+        $_SESSION['user_id'] = User::getUserIdByUsername($_SESSION['username'], $db_connection);
+        $_SESSION['user_role'] = User::getRole($_SESSION['user_id'], $db_connection);
 
-        redirectToPath('/logistic-company/public/index.php');
+        redirectToPath('/logistic-company/index.php');
 
     } else {
 
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 ?>
 
-<?php require '/logistic-company/app/view/header.php'; ?>
+<?php require 'includes/header.php'; ?>
 
 <h4> User login </h4>
 
@@ -61,4 +61,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 </form>
 
-<?php require '/logistic-company/app/view/footer.php'; ?>
+<?php require 'includes/footer.php'; ?>

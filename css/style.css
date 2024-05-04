@@ -61,7 +61,7 @@ footer {
     text-decoration: none;
 }
 
-.no-shipments {
+.no-articles {
     color: #cc0000;
 }
 
@@ -75,7 +75,7 @@ a:hover {
     color: #0044aa; 
 }
 
-shipment h3 a {
+article h3 a {
     color: #333;
     text-decoration: underline; 
     font-size: 1.2em; 
@@ -128,7 +128,7 @@ button[type="submit"] {
     color: #28a745;
 }
 
-shipment {
+article {
     background: #fff;
     padding: 20px;
     margin-bottom: 20px;
@@ -136,11 +136,11 @@ shipment {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-shipment h3 {
+article h3 {
     margin-top: 0;
 }
 
-shipment p {
+article p {
     color: #555;
 }
 
@@ -153,8 +153,8 @@ a.delete-link {
     color: #d9534f;
 }
 
-shipment:hover a.edit-link,
-shipment:hover a.delete-link {
+article:hover a.edit-link,
+article:hover a.delete-link {
     display: inline;
 }
 
