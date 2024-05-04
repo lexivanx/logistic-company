@@ -18,8 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $statusShipment = $_POST['status_shipment'] ?? 'New';
     $shipWeight = $_POST['ship_weight'] ?? 0.00;
     $passengerAmount = $_POST['passenger_amount'] ?? 0;
-    $dateSent = $_POST['date_sent'] ?? date('Y-m-d H:i:s'); 
-    $dateSent = date('Y-m-d\TH:i', strtotime($dateSent));
+    $dateSent = date('Y-m-d\TH:i', strtotime($_POST['date_sent']));
     $deliverFromUserId = $_SESSION['user_id'];
     $deliverToUserId = $_POST['deliver_to_user_id'] ?? null; 
     $delivererUserId = $_POST['deliverer_user_id'] ?? null;
