@@ -40,23 +40,16 @@ if ($results != null) {
 ?>
 <?php require 'includes/header.php'; ?>
 
-<div class="logged-in-info">
-<?php if (checkAuthentication()): ?>
-
-    <p> Currently logged in as: <strong> <?php echo $_SESSION['username']; ?> </strong> </p>
-        <a href="logout.php">Logout</a>
+<!-- Link to admin page and back to index -->
+<div class="employee-links">
+<?php if ($_SESSION['user_role'] == "admin"): ?>
     <p>
-        <a href="controllers/create-shipment.php">Create shipment</a>
+        <a href="admin.php">Admin page</a>
     </p>
 
-<?php else: ?>
-
-    <p> No user logged in </p>
-    <a href="login.php">Login</a>
-    <a href="register.php">Register</a>
-
-<?php endif; ?>
+    <a href="index.php">Back to shipments</a>
 </div>
+<?php endif; ?>
 
 
 <?php if (!checkAuthentication()): ?>
@@ -68,10 +61,9 @@ if ($results != null) {
 <ul>
     <?php foreach ($shipments as $shipment) { ?>
         <li>
-            <shipment>  
-                <!-- Only admins and employees should be able to click shipment links to edit or remove -->
+            <shipment>
                 <h3>
-                    <a href ="views/shipment.php?id=<?= $shipment['id']; ?>"> Shipment ID
+                    <a href ="article.php?id=<?= $shipment['id']; ?>"> Shipment ID
                         <?= htmlspecialchars($shipment['id'], ENT_QUOTES, 'UTF-8'); ?>
                     </a>
                 </h3>

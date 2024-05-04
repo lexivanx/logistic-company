@@ -1,3 +1,4 @@
+-- Script to create database and tables for logistic company project
 create database logistic_companyDB CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 create table company (
@@ -28,6 +29,7 @@ create table user (
     username VARCHAR(50) NOT NULL,
     password VARCHAR(255) NOT NULL,
     office_id INT DEFAULT NULL,
+    full_name VARCHAR(255) NOT NULL,
     FOREIGN KEY (office_id) REFERENCES office(id)
 );
 
@@ -46,7 +48,7 @@ create table shipment (
     date_received DATETIME DEFAULT NULL,
     deliver_from_user_id INT NOT NULL,
     deliver_to_user_id INT DEFAULT NULL,
-    deliverer_user_id INT NOT NULL,
+    deliverer_user_id INT DEFAULT NULL,
     registered_by_user_id INT NOT NULL,
     from_address_id INT NOT NULL,
     to_address_id INT NOT NULL,
