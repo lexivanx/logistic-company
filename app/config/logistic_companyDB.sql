@@ -48,15 +48,15 @@ create table shipment (
     deliver_to_user_id INT DEFAULT NULL,
     deliverer_user_id INT NOT NULL,
     registered_by_user_id INT NOT NULL,
-    price_id INT NOT NULL,
     from_address_id INT NOT NULL,
     to_address_id INT NOT NULL,
     delivery_contact_info VARCHAR(255) DEFAULT NULL,
+    exact_price DECIMAL(10,2) NOT NULL,
+    is_paid BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (deliver_from_user_id) REFERENCES user(id),
     FOREIGN KEY (deliver_to_user_id) REFERENCES user(id),
     FOREIGN KEY (deliverer_user_id) REFERENCES user(id),
     FOREIGN KEY (registered_by_user_id) REFERENCES user(id),
-    FOREIGN KEY (price_id) REFERENCES price(id),
     FOREIGN KEY (from_address_id) REFERENCES address(id),
     FOREIGN KEY (to_address_id) REFERENCES address(id)
 );

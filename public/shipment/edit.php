@@ -1,14 +1,14 @@
 <?php
 
-require  __DIR__ . '/../config/db.php';
-require  __DIR__ . '/../service/shipment-funs.php';
-require  __DIR__ . '/../service/http.php';
-require  __DIR__ . '/../service/authentication.php';
-require __DIR__ . '/../model/User.php';
+require '/logistic-company/app/config/db.php';
+require '/logistic-company/app/service/ShipmentService.php';
+require '/logistic-company/app/service/http.php';
+require '/logistic-company/app/service/authentication.php';
+require '/logistic-company/app/service/UserService.php';
 
 session_start();
 
-if (!checkAuthentication() || !(User::get_role($_SESSION['user_id']) == 'admin' || User::get_role($_SESSION['user_id']) == 'employee')) {
+if (!checkAuthentication() || !($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'employee')) {
     redirectToPath('/logistic-company/public/index.php');
     die("You don't have permission to edit or remove");
 }
@@ -19,22 +19,14 @@ $db_connection = getDB();
 ### If ID is not set, print error and exit script
 if (isset($_GET['id'])) {
 
-    $shipment = getShipment($db_connection, $_GET['id']);
+    $shipment = UserService::getShipment($db_connection, $_GET['id']);
 
     ## If ID is invalid, print error and exit script
     if ($shipment) {
 
         $id = $shipment['id'];
-        $title = $shipment['title'];
-        $body = $shipment['body'];
-        $time_of = $shipment['time_of'];
-        $created_by = $shipment['created_by'];
-
-        if ($_SESSION['username'] != "admin" && $_SESSION['username'] != $shipment['created_by']) {
-
-            die("You don't have permission to edit or remove");
-
-        }
+        $deliver_from_user_id = $shipment['deliver_from_user_id'];
+        $deliver_to_user_id = $shipment['deliver_to_user_id'];
 
     } else {
 
@@ -95,10 +87,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 ?>
 
-<?php require  __DIR__ . '/../view/header.php'; ?>
+<?php require  __DIR__ . '/logistic-company/app/view/header.php'; ?>
 
 <h4> Shipment information </h4>
 
-<?php require  __DIR__ . '/../view/shipment-form.php'; ?>
+<?php require  __DIR__ . '/logistic-company/app/view/shipment-form.php'; ?>
 
-<?php require  __DIR__ . '/../view/footer.php'; ?>
+<?php require  __DIR__ . '/logistic-company/app/view/footer.php'; ?>

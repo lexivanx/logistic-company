@@ -1,39 +1,41 @@
 <?php
 
-require __DIR__ . '/../app/config/db.php';
-require __DIR__ . '/../app/service/authentication.php';
-require __DIR__ . '/../controller/AddressController.php'; // directly services?
-require __DIR__ . '/../app/model/User.php';
+require '/logistic-company/app/config/db.php';
+require '/logistic-company/app/service/authentication.php';
+require '/logistic-company/app/service/AddressService.php'; 
 
 session_start();
 
-require __DIR__ . '/../app/view/header.php';
+require '/logistic-company/app/view/header.php';
 
 // Redirect logic
 echo '<div class="employeelinks">';
-if (!checkAuthentication() || !(User::get_role($_SESSION['user_id']) == 'admin' || User::get_role($_SESSION['user_id']) == 'employee')) {
+if (!checkAuthentication() || !($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'employee')) {
     redirectToPath('/logistic-company/public/index.php');
-    exit;
-} else if (User::get_role($_SESSION['user_id']) == 'admin') {
+    die("You don't have permission to edit or remove");
+}
+
+if ($_SESSION['role'] == 'admin') {
     echo '<a href="admin.php">Admin</a>';
 } 
+
 echo '<a href="register.php">Queries</a>';
 echo '</div>';
 
 // Handling addresses display
-$addresses = AddressController::getAllAddresses();
+$addresses = AddressService::getAllAddresses();
 if (empty($addresses)) {
     echo "<p>No addresses found.</p>";
 } else {
     echo "<ul>";
     foreach ($addresses as $address) {
         echo "<li>{$address['street']} {$address['number']}, {$address['city']}, {$address['country']}";
-        echo " <a href='/logistic-company/app/controller/edit-address.php?id={$address['id']}' class='edit-link'>Edit</a>";
-        echo " <a href='/logistic-company/app/controller/remove-address.php?id={$address['id']}' class='delete-link' onclick='return confirm(\"Are you sure?\");'>Delete</a></li>";
+        echo " <a href='/logistic-company/public/address/edit.php?id={$address['id']}' class='edit-link'>Edit</a>";
+        echo " <a href='/logistic-company/public/address/remove.php?id={$address['id']}' class='delete-link' onclick='return confirm(\"Are you sure?\");'>Delete</a></li>";
     }
     echo "</ul>";
 }
 
-require __DIR__ . '/../app/view/footer.php';
+require '/logistic-company/app/view/footer.php';
 
 ?>

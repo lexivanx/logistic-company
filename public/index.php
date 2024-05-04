@@ -1,8 +1,8 @@
 <?php
 
-require __DIR__ . '/../app/config/db.php';
-require __DIR__ . '/../app/service/authentication.php';
-require __DIR__ . '/../app/model/User.php';
+require '/logistic-company/app/config/db.php';
+require '/logistic-company/app/service/authentication.php';
+require '/logistic-company/app/model/UserService.php';
 
 session_start();
 
@@ -19,7 +19,7 @@ if ( $results === false) {
 }
 
 ?>
-<?php require __DIR__ . '/../app/view/header.php'; ?>
+<?php require '/logistic-company/app/view/header.php'; ?>
 
 <div class="logged-in-info">
 <?php if (checkAuthentication()): ?>
@@ -33,8 +33,8 @@ if ( $results === false) {
 <?php else: ?>
 
     <p> No user logged in </p>
-    <a href="login.php">Login</a>
-    <a href="register.php">Register</a>
+    <a href="/logistic-company/public/login.php">Login</a>
+    <a href="/logistic-company/public/register.php">Register</a>
 
 <?php endif; ?>
 </div>
@@ -49,7 +49,7 @@ if ( $results === false) {
         <li>
             <shipment>
                 <h3>
-                <?php if (checkAuthentication() && (User::get_role($_SESSION['user_id']) == 'admin' || User::get_role($_SESSION['user_id']) == 'employee')): ?>
+                <?php if (checkAuthentication() && ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'employee')): ?>
                     <a href ="/logistic-company/app/view/shipment.php?id=<?= $shipment['id']; ?>">
                         <?= htmlspecialchars($shipment['title'], ENT_QUOTES, 'UTF-8'); ?>
                     </a>
@@ -73,4 +73,4 @@ if ( $results === false) {
 </ul>
 
 <?php endif; ?>
-<?php require  __DIR__ . '/../app/view/footer.php'; ?>
+<?php require '/logistic-company/app/view/footer.php'; ?>

@@ -1,6 +1,6 @@
 <?php
 
-require 'http.php';
+require '/logistic-company/app/service/http.php';
 
 session_start();
 

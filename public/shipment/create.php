@@ -1,9 +1,9 @@
 <?php 
 
-require  __DIR__ . '/../config/db.php';
-require  __DIR__ . '/../service/shipment-funs.php';
-require  __DIR__ . '/../service/http.php';
-require  __DIR__ . '/../service/authentication.php';
+require '/logistic-company/app/config/db.php';
+require '/logistic-company/app/service/ShipmentService.php';
+require '/logistic-company/app/service/http.php';
+require '/logistic-company/app/service/authentication.php';
 
 session_start();
 
@@ -23,7 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $time_of = $_POST['time_of'];
     $created_by = $_SESSION['username'];
 
-    $errors = getShipmentErrs($title, $body, $time_of);
+    $errors = ShipmentService::getShipmentErrs($title, $body, $time_of);
 
     ## Check for errors in form
     if(empty($errors)) {
@@ -65,10 +65,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 ?>
 
-<?php require  __DIR__ . '/../view/header.php'; ?>
+<?php require '/logistic-company/app/view/header.php'; ?>
 
 <h4> Create a new shipment </h4>
 
-<?php require  __DIR__ . '/../view/shipment.php'; ?>
+<?php require '/logistic-company/app/view/shipment.php'; ?>
 
-<?php require  __DIR__ . '/../view/footer.php'; ?>
+<?php require '/logistic-company/app/view/footer.php'; ?>

@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__ . '/../config/db.php';
+require '/logistic-company/app/config/db.php';
 
 class AddressService {
 

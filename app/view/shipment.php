@@ -2,15 +2,15 @@
 
 session_start();
 
-require __DIR__ . '/../config/db.php';
-require __DIR__ . '/../service/shipment-funs.php';
-require __DIR__ . '/../service/authentication.php';
-require __DIR__ . '/../app/model/User.php';
+require '/logistic-company/app/config/db.php';
+require '/logistic-company/app/service/ShipmentService.php';
+require '/logistic-company/app/service/authentication.php';
+require '/logistic-company/app/service/UserService.php';
 
 // Role protection
-if (!checkAuthentication() || !(User::get_role($_SESSION['user_id']) == 'admin' || User::get_role($_SESSION['user_id']) == 'employee')) {
+if (!checkAuthentication() || !($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'employee')) {
     redirectToPath('/logistic-company/public/index.php');
-    exit;
+    die("You don't have permission to edit or remove");
 }
 
 ## Fetch connection to DB
@@ -18,7 +18,7 @@ $db_connection = getDB();
 
 if (isset($_GET['id'])) {
 
-    $shipment = getShipment($db_connection, $_GET['id']);
+    $shipment = ShipmentService::getShipment($db_connection, $_GET['id']);
 
 } else {
 
@@ -27,7 +27,7 @@ if (isset($_GET['id'])) {
 }
 
 ?>
-<?php require __DIR__ . '/../view/header.php'; ?>
+<?php require '/logistic-company/app/view/header.php'; ?>
     <?php if ($shipment === null): ?>
         <p class="error-message">No shipments found.</p>
     <?php else: ?>
@@ -56,4 +56,4 @@ if (isset($_GET['id'])) {
         <?php endif; ?>
         
     <?php endif; ?>
-<?php require __DIR__ . '/../view/footer.php'; ?>
+<?php require '/logistic-company/app/view/footer.php'; ?>

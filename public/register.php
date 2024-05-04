@@ -1,8 +1,7 @@
 <?php
 
-require __DIR__ . '/../app/model/User.php';
-require __DIR__ . '/../app/service/http.php';
-require __DIR__ . '/../app/config/db.php';
+require '/logistic-company/app/service/http.php';
+require '/logistic-company/app/config/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
@@ -58,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 ?>
 
-<?php require  __DIR__ . '/../app/view/header.php'; ?>
+<?php require '/logistic-company/app/view/header.php'; ?>
 
 <h4> User registration </h4>
 
@@ -84,4 +83,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 </form>
 
-<?php require  __DIR__ . '/../app/view/footer.php'; ?>
+<?php require '/logistic-company/app/view/footer.php'; ?>
