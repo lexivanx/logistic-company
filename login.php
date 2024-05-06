@@ -19,9 +19,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ## Set session variables
         $_SESSION['is_logged_in'] = true;
         $_SESSION['username'] = $_POST['username'];
-        // Get the user id
+        ## Get the user id
         $_SESSION['user_id'] = User::getUserIdByUsername($_SESSION['username'], $db_connection);
         $_SESSION['user_role'] = User::getRole($_SESSION['user_id'], $db_connection);
+
+        ## Set only for employees for filtering purposes
+        if ($_SESSION['user_role'] == "employee") {
+            $_SESSION['company_id'] = User::getCompanyIdByUserId($_SESSION['user_id'], $db_connection);
+        } 
 
         redirectToPath('/logistic-company/index.php');
 

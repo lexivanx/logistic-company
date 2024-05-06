@@ -3,7 +3,7 @@
 session_start();
 
 require '../includes/db.php';
-require '../includes/shipment-funs.php';
+require '../classes/Shipment.php';
 require '../includes/http.php';
 require '../includes/authentication.php';
 
@@ -19,7 +19,7 @@ if (!isset($_GET['id'])) {
     die("ID not specified, no shipment found");
 }
 
-$shipment = getShipment($db_connection, $_GET['id']);
+$shipment = Shipment::getShipment($db_connection, $_GET['id']);
 
 ### If ID is invalid or the shipment does not exist, print error and exit script
 if ($shipment) {

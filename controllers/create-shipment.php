@@ -3,7 +3,9 @@
 session_start();
 
 require '../includes/db.php';
-require '../includes/shipment-funs.php';
+require '../classes/Shipment.php';
+require '../classes/User.php';
+require '../classes/Address.php';
 require '../includes/http.php';
 require '../includes/authentication.php';
 
@@ -16,9 +18,9 @@ $statusShipment = '';
 $shipWeight = '';
 $passengerAmount = '';
 $dateSent = '';
-$deliverFromUserId = '';
-$deliverToUserId = '';
-$delivererUserId = '';
+$deliver_from_full_name = '';
+$deliver_to_full_name = '';
+$deliverer_employee_name = '';
 $registeredByUserId = '';
 $fromAddressId = '';
 $toAddressId = '';
@@ -29,27 +31,32 @@ $delivery_contact_info = '';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     ## Prepare default or form values
-    $statusShipment = $_POST['status_shipment'];
+    $statusShipment = 'New';
     $shipWeight = $_POST['ship_weight'];
     $passengerAmount = $_POST['passenger_amount'];
     $dateSent = $_POST['date_sent'];
     $dateReceived = null;
-    $deliverFromUserId = $_POST['deliver_from_user_id'];
-    $deliverToUserId = $_POST['deliver_to_user_id']; 
-    $delivererUserId = $_POST['deliverer_user_id'];
+    $deliver_from_full_name = $_POST['deliver_from_full_name'];
+    $deliver_to_full_name = $_POST['deliver_to_full_name'];
+    $deliverer_employee_name = $_POST['deliverer_employee_name'];
     $registeredByUserId = $_SESSION['user_id'];
-    $fromAddressId = $_POST['from_address_id'];
-    $toAddressId = $_POST['to_address_id'];
     $exactPrice = $_POST['exact_price'];
     $delivery_contact_info = $_POST['delivery_contact_info'];
     $isPaid = isset($_POST['is_paid']) ? 1 : 0; // checkbox
 
     // Check for errors in form
-    $errors = getShipmentErrs($fromAddressId, $toAddressId, $shipWeight, $passengerAmount);
-    if (empty($errors)) {
+    $errors = Shipment::getShipmentErrs($shipWeight, $passengerAmount);
+    $errors_names = User::getUserShipmentErrs($deliver_from_full_name, $deliver_to_full_name, $deliverer_employee_name, $db_connection);
+    $errors_from_address = Address::getAddressErrs('Source', $_POST['from_country'], $_POST['from_city'], $_POST['from_street'], $_POST['from_street_number']);
+    $errors_to_address = Address::getAddressErrs('Destination', $_POST['to_country'], $_POST['to_city'], $_POST['to_street'], $_POST['to_street_number']);
+    if (empty($errors) && empty($errors_names) && empty($errors_from_address) && empty($errors_to_address)){
         
         ## Fetch connection to DB
         $db_connection = getDB();
+
+        $deliverFromUserId = User::getUserIdByFullName($deliver_from_full_name, $db_connection);
+        $deliverToUserId = User::getUserIdByFullName($deliver_to_full_name, $db_connection);
+        $delivererUserId = User::getUserIdByFullName($deliverer_employee_name, $db_connection);
 
         $prepared_query = mysqli_prepare($db_connection, "INSERT INTO shipment (statusShipment, ship_weight, 
         passenger_amount, date_sent, deliver_from_user_id, deliver_to_user_id, deliverer_user_id, 
@@ -91,7 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             # Calculate price
             # Fetch price field in table 'price' where weight_class='package_c'
             # Store field value in $exactPrice
-            if ($shipWeight > 0.00 && $shipWeight <= 5.00) {
+            if ($shipWeight > 0.05 && $shipWeight <= 5.00) {
                 $sql_query = "SELECT price FROM price WHERE weight_class = 'package_c'";
             } elseif ($shipWeight > 5.00 && $shipWeight < 20.00) {
                 $sql_query = "SELECT price FROM price WHERE weight_class = 'package_b'";
@@ -114,6 +121,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 $exactPrice = 0.00;
             }
+
+            ## Create or retrieve address
+            $fromAddressId = Address::createOrUpdateAddress($db_connection, $_POST['from_country'], $_POST['from_city'], $_POST['from_street'], $_POST['from_street_number']);
+            $toAddressId = Address::createOrUpdateAddress($db_connection, $_POST['to_country'], $_POST['to_city'], $_POST['to_street'], $_POST['to_street_number']);
             
             # Handle quotes, escape characters, SQL injection etc
             mysqli_stmt_bind_param($prepared_query, "sdisiiiiiisdi", 
@@ -123,10 +134,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
             if (mysqli_stmt_execute($prepared_query)) {
-                # Fetch id of new entry
-                $id = mysqli_insert_id($db_connection);
-                # Redirect to shipment page
-                redirectToPath("/logistic-company/views/shipment.php?id=$id");
+                # Redirect to index page
+                redirectToPath("/logistic-company/index.php");
             } else {
                 echo mysqli_stmt_error($prepared_query);
             }

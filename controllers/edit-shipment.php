@@ -3,7 +3,7 @@
 session_start();
 
 require '../includes/db.php';
-require '../includes/shipment-funs.php';
+require '../classes/Shipment.php';
 require '../includes/http.php';
 require '../includes/authentication.php';
 
@@ -19,7 +19,7 @@ if (!isset($_GET['id'])) {
     die("ID not specified, no shipment found");
 }
 
-$shipment = getShipment($db_connection, $_GET['id']);
+$shipment = Shipment::getShipment($db_connection, $_GET['id']);
 
 ### Check if the shipment exists and handle permissions
 if ($shipment) {
@@ -63,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $delivery_contact_info = $_POST['delivery_contact_info'];
     $isPaid = isset($_POST['is_paid']) ? 1 : 0; // checkbox
 
-    $errors = getShipmentErrs($fromAddressId, $toAddressId, $shipWeight, $passengerAmount);
+    $errors = Shipment::getShipmentErrs($shipWeight, $passengerAmount);
 
     ## Check for errors in form
     if(empty($errors)) {

@@ -1,13 +1,30 @@
-html, body, h1, h2, h3, p, ul, li, header, main, footer {
+h1, h2, h3, p, ul, li, header, main {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
     margin: 0;
     padding: 0;
 }
 
 body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    padding-bottom: 50px;
     font-family: Arial, sans-serif;
     line-height: 1.6;
     padding-bottom: 50px;
 }
+
+main {
+    flex: 1;
+    padding: 20px;
+}
+
 
 header {
     background-color: #f4f4f4;
@@ -45,10 +62,9 @@ footer {
     color: white;
     text-align: center;
     padding: 10px 0;
-    position: absolute;
-    bottom: 0;
     width: 100%;
 }
+
 
 .logged-in-info {
     font-style: italic;
@@ -228,7 +244,6 @@ h4 {
 
 .cancel-link {
     display: block;             /* Use block to ensure it fills the container */
-    width: 100%;                /* Ensure it attempts to fill the container */
     padding: 12px;              /* Match padding of the button, adjust as needed */
     background-color: #d9534f;  /* Red background, same as previous */
     color: white;               /* White text */

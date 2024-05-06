@@ -1,10 +1,6 @@
 <?php
 
-class User{
-
-    public $id;
-    public $username;
-    public $password;
+class User {
 
     ### Return true if user and pass are correct
     public static function userAuth($username, $password, $db_connection) {
@@ -13,26 +9,22 @@ class User{
         $prepared_query = mysqli_prepare($db_connection, $sql_query);
 
         ## Check for error in query
-        if ( $prepared_query === false) {
-
+        if ($prepared_query === false) {
             echo mysqli_error($db_connection);
-
         } else {
-
             ## Bind username and execute query
             mysqli_stmt_bind_param($prepared_query, "s", $username);
             mysqli_stmt_execute($prepared_query);
 
             $result = mysqli_stmt_get_result($prepared_query);
-            $user = mysqli_fetch_object($result, 'User');
+            $user = mysqli_fetch_assoc($result);
 
             ## Verify if hashed pass is correct
             if ($user) {
-                return password_verify($password, $user->password);
+                return password_verify($password, $user['password']);
             }
-
         }
-
+        return false; // Return false if no user is found or on error
     }
 
     ### Return user id by username
@@ -42,58 +34,134 @@ class User{
         $prepared_query = mysqli_prepare($db_connection, $sql_query);
 
         ## Check for error in query
-        if ( $prepared_query === false) {
-
+        if ($prepared_query === false) {
             echo mysqli_error($db_connection);
-
         } else {
-
             ## Bind username and execute query
             mysqli_stmt_bind_param($prepared_query, "s", $username);
             mysqli_stmt_execute($prepared_query);
 
             $result = mysqli_stmt_get_result($prepared_query);
-            $user = mysqli_fetch_object($result, 'User');
+            $user = mysqli_fetch_assoc($result);
 
-            return $user->id;
-
+            return $user ? $user['id'] : null;
         }
     }
 
-    ### Return user_name by querying 'role' table where user_id == id
+    ### Return full_name field of user by user id
+    public static function getUserFullNameById($user_id, $db_connection) {
+        $sql_query = "SELECT full_name FROM user WHERE id = ?";
+
+        $prepared_query = mysqli_prepare($db_connection, $sql_query);
+
+        ## Check for error in query
+        if ($prepared_query === false) {
+            echo mysqli_error($db_connection);
+            return null;
+        } else {
+            ## Bind user_id and execute query
+            mysqli_stmt_bind_param($prepared_query, "i", $user_id);
+            mysqli_stmt_execute($prepared_query);
+
+            $result = mysqli_stmt_get_result($prepared_query);
+            $user = mysqli_fetch_assoc($result);
+
+            return $user ? $user['full_name'] : null;
+        }
+    }
+
+    ### Return id field of user by full_name
+    public static function getUserIdByFullName($full_name, $db_connection) {
+        $sql_query = "SELECT id FROM user WHERE full_name = ?";
+
+        $prepared_query = mysqli_prepare($db_connection, $sql_query);
+
+        ## Check for error in query
+        if ($prepared_query === false) {
+            echo mysqli_error($db_connection);
+            return null;
+        } else {
+            ## Bind full_name and execute query
+            mysqli_stmt_bind_param($prepared_query, "s", $full_name);
+            mysqli_stmt_execute($prepared_query);
+
+            $result = mysqli_stmt_get_result($prepared_query);
+            $user = mysqli_fetch_assoc($result);
+
+            return $user ? $user['id'] : null;
+        }
+    }
+
+    ## Return company_id by retrieving office_id of user and then retrieving the company_id from the office table by the retrieved office_id
+    public static function getCompanyIdByUserId($user_id, $db_connection) {
+        $sql_query = "SELECT company_id FROM office WHERE id = (SELECT office_id FROM user WHERE id = ?)";
+
+        $prepared_query = mysqli_prepare($db_connection, $sql_query);
+
+        ## Check for error in query
+        if ($prepared_query === false) {
+            echo mysqli_error($db_connection);
+            return null;
+        } else {
+            ## Bind user_id and execute query
+            mysqli_stmt_bind_param($prepared_query, "i", $user_id);
+            mysqli_stmt_execute($prepared_query);
+
+            $result = mysqli_stmt_get_result($prepared_query);
+            $office = mysqli_fetch_assoc($result);
+
+            return $office ? $office['company_id'] : null;
+        }
+    }
+
+    ### Return role_name by querying 'role' table where user_id == id
     public static function getRole($user_id, $db_connection) {
         $sql_query = "SELECT role_name FROM role WHERE user_id = ?";
-    
+
         $prepared_query = mysqli_prepare($db_connection, $sql_query);
-    
-        // Check for error in preparing the query
+
         if ($prepared_query === false) {
             echo "Error preparing statement: " . mysqli_error($db_connection);
-            return null; // Return null to indicate failure
+            return null;
         } else {
             // Bind user_id and execute query
             mysqli_stmt_bind_param($prepared_query, "i", $user_id);
             mysqli_stmt_execute($prepared_query);
-    
+
             $result = mysqli_stmt_get_result($prepared_query);
-    
-            // Check for errors after executing the query
+
             if ($result === false) {
                 echo "Error executing query: " . mysqli_error($db_connection);
-                return null; // Return null to indicate failure
+                return null;
             }
-    
-            $role = mysqli_fetch_object($result);
-    
-            if ($role === null) {
+
+            $role = mysqli_fetch_assoc($result);
+
+            if (!$role) {
                 echo "No role found for user ID: " . $user_id;
-                return null; // Return null if no role is found
+                return null;
             }
-    
-            return $role->role_name; // Return the role name
+
+            return $role['role_name'];
         }
     }
-    
-}
 
+    ### Function to validate if address fields are empty
+    public static function getUserShipmentErrs($sender_name, $recipient_name, $delivery_name, $db_connection) {
+        $errors = [];
+
+        if (!User::getUserFullNameById($sender_name, $db_connection) && $sender_name != '') {
+            $errors[] = "Sender name does not exist!";
+        }
+        if (!User::getUserFullNameById($recipient_name, $db_connection) && $recipient_name != '') {
+            $errors[] = "Recipient not registered! Please leave blank";
+        }
+        if (!User::getUserFullNameById($delivery_name, $db_connection) && $delivery_name != '') {
+            $errors[] = "No such driver exists!";
+        }
+
+        return $errors;
+    }
+
+}
 ?>
