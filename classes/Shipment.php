@@ -1,5 +1,4 @@
 <?php
-
 class Shipment {
 
     ### Function to fetch article columns based on DB connection and ID
@@ -31,13 +30,10 @@ class Shipment {
         
         // Shipment required fields
         if ($shipWeight != 0.00 && $passengerAmount != 0) {
-            $errors[] = "Can't set both ship weight and passenger amount!";
+            $errors[] = "Can't set both shipment weight and passenger amount!";
         }
-        if ($shipWeight == '' && $passengerAmount == '') {
-            $errors[] = "At least ship weight OR passenger amount required!";
-        }
-        if ($shipWeight == 0.00 && $passengerAmount == 0) {
-            $errors[] = "At least ship weight OR passenger amount required!";
+        if (($shipWeight == '' && $passengerAmount == '') || ($shipWeight == 0.00 && $passengerAmount == 0)){
+            $errors[] = "At least shipment weight OR passenger amount required!";
         }
 
         return $errors;

@@ -8,6 +8,16 @@ session_start();
 ## Fetch connection to DB
 $db_connection = getDB();
 
+#
+#
+#
+## QUERIES
+## INITIALIZE $results variable according to the query defined from the links"query-links"
+# if the role is X and link is pressed, $results should be the query for that role and link
+# difference between admin and employee is that employee uses only his own company id
+#
+#
+
 if (checkAuthentication()) {
     ### NB NB NB!!!! Admin needs to see all companies, employee only his own
     if ($_SESSION['user_role'] == "admin") {
@@ -68,7 +78,7 @@ if ($results != null) {
 <!-- All shipments by deliver_from_user_id, specified using user full_name -->
 <!-- All shipments with status 'Received' and deliver_to_user_id, specifiued using user full_name -->
 <!-- For admin, no company id needs to be specified, for employee, the session variable  $_SESSION['company_id'] always needs to be used -->
-<div class="query buttons">
+<div class="query-links">
 <?php if ($_SESSION['user_role'] == "admin" || $_SESSION['user_role'] == "employee"): ?>
     <a href="index.php">All shipments</a><br>
     <a href="index.php">All shipments by employee</a><br>

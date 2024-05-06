@@ -5,8 +5,28 @@
         <?php } ?>
     </ul>
 <?php endif; ?>
-<div class="shipment-details">
-<form method="post">
+<?php if (!empty($errors_names)): ?>
+    <ul>
+        <?php foreach ($errors_names as $error) { ?>
+            <li class="error-message"><?= $error; ?></li>
+        <?php } ?>
+    </ul>
+<?php endif; ?>
+<?php if (!empty($errors_from_address)): ?>
+    <ul>
+        <?php foreach ($errors_from_address as $error) { ?>
+            <li class="error-message"><?= $error; ?></li>
+        <?php } ?>
+    </ul>
+<?php endif; ?>
+<?php if (!empty($errors_to_address)): ?>
+    <ul>
+        <?php foreach ($errors_to_address as $error) { ?>
+            <li class="error-message"><?= $error; ?></li>
+        <?php } ?>
+    </ul>
+<?php endif; ?>
+<form class="shipment-details" method="post">
     <?php if ($shipment): ?>
             <p>Shipment ID: <?= $shipment['id']; ?></p>
     <?php endif; ?>
@@ -61,7 +81,7 @@
     </div>
     <div>
         <label for="deliveryContactInfo">Delivery Contact Info:</label>
-        <input type="text" name="delivery_contact_info" id="delivery_contact_info" value="<?= htmlspecialchars($delivery_contact_info, ENT_QUOTES, 'UTF-8'); ?>">
+        <input name="delivery_contact_info" id="delivery_contact_info" value="<?= htmlspecialchars($delivery_contact_info, ENT_QUOTES, 'UTF-8'); ?>">
     </div>
     <div>
         <p>Price: <?= htmlspecialchars($exactPrice, ENT_QUOTES, 'UTF-8'); ?> BGN</p>
@@ -87,4 +107,3 @@
         <a class="cancel-link" href="/logistic-company/index.php">Cancel</a>
     <?php endif; ?>
 </form>
-</div>

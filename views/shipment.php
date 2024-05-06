@@ -69,11 +69,16 @@ if ($shipment !== null && isset($_GET['id'])) {
 
         <shipment>
             <h3>Shipment ID: <?= htmlspecialchars($shipment['id'], ENT_QUOTES, 'UTF-8'); ?></h3>
+            <div>
             <p>Status: <?= htmlspecialchars($shipment['statusShipment'], ENT_QUOTES, 'UTF-8'); ?></p>
-            <p>Ship Weight: <?= htmlspecialchars($shipment['ship_weight'], ENT_QUOTES, 'UTF-8'); ?></p>
-            <p>Passenger Amount: <?= htmlspecialchars($shipment['passenger_amount'], ENT_QUOTES, 'UTF-8'); ?></p>
+            <?php if ($shipment['ship_weight'] >= 0.35): ?>
+                <p>Ship Weight: <?= htmlspecialchars($shipment['ship_weight'], ENT_QUOTES, 'UTF-8'); ?></p>
+            <?php else: ?>
+                <p>Passenger Amount: <?= htmlspecialchars($shipment['passenger_amount'], ENT_QUOTES, 'UTF-8'); ?></p>
+            <?php endif; ?>
             <p>Date sent: <?= htmlspecialchars($shipment['date_sent'], ENT_QUOTES, 'UTF-8'); ?></p>
             <p>Date arrived: <?php if ($shipment['date_received']) { echo htmlspecialchars($shipment['date_received'], ENT_QUOTES, 'UTF-8'); } else { echo "Not received yet"; } ?> (can be completed on shipment page)</p>
+            </div>
             <div>
             <p>Sender name: <?= htmlspecialchars($deliver_from_full_name, ENT_QUOTES, 'UTF-8'); ?></p>
             <p>Recipient name: <?= htmlspecialchars($deliver_to_full_name, ENT_QUOTES, 'UTF-8'); ?></p>
@@ -94,9 +99,11 @@ if ($shipment !== null && isset($_GET['id'])) {
             <p>Street: <?= htmlspecialchars($to_street, ENT_QUOTES, 'UTF-8'); ?></p>
             <p>Street Number: <?= htmlspecialchars($to_street_number, ENT_QUOTES, 'UTF-8'); ?></p>
             </div>
-            <p>Delivery Contact Info: <?= htmlspecialchars($shipment['delivery_contact_info'], ENT_QUOTES, 'UTF-8'); ?></p>
+            <div>
+            <p>Delivery Contact Info: <?php if ($shipment['delivery_contact_info']) { echo htmlspecialchars($shipment['delivery_contact_info'], ENT_QUOTES, 'UTF-8'); } else { echo "Not provided"; } ?></p>
             <p>Exact Price: <?= htmlspecialchars($shipment['exact_price'], ENT_QUOTES, 'UTF-8'); ?></p>
-            <p>Is Paid: <?= $shipment['is_paid'] ? 1 : 0; ?></p>
+            <p>Is Paid: <?= $shipment['is_paid'] ? 'Yes' : 'No'; ?></p>
+            </div>
         </shipment>
 
         <?php if (checkAuthentication()): ?>

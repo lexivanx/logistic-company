@@ -150,13 +150,16 @@ class User {
     public static function getUserShipmentErrs($sender_name, $recipient_name, $delivery_name, $db_connection) {
         $errors = [];
 
-        if (!User::getUserFullNameById($sender_name, $db_connection) && $sender_name != '') {
+        if (empty($sender_name)) {
+            $errors[] = "Sender can't be empty!";
+        }
+        if (!User::getUserIdByFullName($sender_name, $db_connection)) {
             $errors[] = "Sender name does not exist!";
         }
-        if (!User::getUserFullNameById($recipient_name, $db_connection) && $recipient_name != '') {
+        if (!User::getUserIdByFullName($recipient_name, $db_connection) && !empty($recipient_name)) {
             $errors[] = "Recipient not registered! Please leave blank";
         }
-        if (!User::getUserFullNameById($delivery_name, $db_connection) && $delivery_name != '') {
+        if (!User::getUserIdByFullName($delivery_name, $db_connection) && !empty($delivery_name)) {
             $errors[] = "No such driver exists!";
         }
 

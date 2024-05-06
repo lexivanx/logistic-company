@@ -22,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         ## Get the user id
         $_SESSION['user_id'] = User::getUserIdByUsername($_SESSION['username'], $db_connection);
         $_SESSION['user_role'] = User::getRole($_SESSION['user_id'], $db_connection);
+        $_SESSION['full_name'] = User::getUserFullNameById($_SESSION['user_id'], $db_connection);
 
         ## Set only for employees for filtering purposes
         if ($_SESSION['user_role'] == "employee") {

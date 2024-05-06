@@ -34,8 +34,16 @@ if ($shipment) {
     $dateReceived = $shipment['date_received'];
     
     $deliverFromUserId = $shipment['deliver_from_user_id'];
-    $deliverToUserId = $shipment['deliver_to_user_id']; 
+    $deliver_from_full_name = User::getUserFullNameById($shipment['deliver_from_user_id'], $db_connection);
+    
+    $registered_by_full_name = User::getUserFullNameById($shipment['registered_by_user_id'], $db_connection);
+
+    $deliverToUserId = $shipment['deliver_to_user_id'];
+    $deliver_to_full_name = User::getUserFullNameById($shipment['deliver_to_user_id'], $db_connection);
+
     $delivererUserId = $shipment['deliverer_user_id'];
+    $deliverer_employee_name = User::getUserFullNameById($shipment['deliverer_user_id'], $db_connection);
+
     $registeredByUserId = $shipment['registered_by_user_id'];
     
     $fromAddressId = $shipment['from_address_id'];
@@ -72,20 +80,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $shipWeight = $_POST['ship_weight'];
     $passengerAmount = $_POST['passenger_amount'];
     $dateSent = $_POST['date_sent'];
-    $deliverFromUserId = $_POST['deliver_from_user_id'];
-    $deliverToUserId = $_POST['deliver_to_user_id']; 
-    $delivererUserId = $_POST['deliverer_user_id'];
     $registeredByUserId = $_SESSION['user_id'];
-    $fromAddressId = $_POST['from_address_id'];
-    $toAddressId = $_POST['to_address_id'];
     $delivery_contact_info = $_POST['delivery_contact_info'];
     $isPaid = isset($_POST['is_paid']) ? 1 : 0; // checkbox
 
+    // Check for errors in form
     $errors = Shipment::getShipmentErrs($shipWeight, $passengerAmount);
-
-    ## Check for errors in form
-    if(empty($errors)) {
-
+    $errors_names = User::getUserShipmentErrs($_POST['deliver_from_full_name'], $_POST['deliver_to_full_name'], $_POST['deliverer_employee_name'], $db_connection);
+    $errors_from_address = Address::getAddressErrs('Source', $_POST['from_country'], $_POST['from_city'], $_POST['from_street'], $_POST['from_street_number']);
+    $errors_to_address = Address::getAddressErrs('Destination', $_POST['to_country'], $_POST['to_city'], $_POST['to_street'], $_POST['to_street_number']);
+    if (empty($errors) && empty($errors_names) && empty($errors_from_address) && empty($errors_to_address)){
+        
         ## Update query
         $prepared_query = mysqli_prepare($db_connection, "UPDATE shipment SET statusShipment = ?, date_sent = ?, 
         deliver_from_user_id = ?, deliver_to_user_id = ?, deliverer_user_id = ?, 
@@ -143,7 +148,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $result = mysqli_query($db_connection, $sql_query);
             $row = mysqli_fetch_assoc($result);
 
-            if ($shipWeight > 0.00) {
+            if ($shipWeight > 0.35) {
                 $exactPrice = $shipWeight * $row['price'];
             } elseif ($passengerAmount > 0) {
                 $exactPrice = $passengerAmount * $row['price'];
@@ -151,7 +156,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $exactPrice = 0.00;
             }
 
-            ## Create or retrieve address
+            ## User changes
+            $deliverFromUserId = User::getUserIdByFullName($_POST['deliver_from_full_name'], $db_connection);
+            $deliverToUserId = User::getUserIdByFullName($_POST['deliver_to_full_name'], $db_connection);
+            $delivererUserId = User::getUserIdByFullName($_POST['deliverer_employee_name'], $db_connection);
+
+            ## Address changes
             $fromAddressId = Address::createOrUpdateAddress($db_connection, $_POST['from_country'], $_POST['from_city'], $_POST['from_street'], $_POST['from_street_number']);
             $toAddressId = Address::createOrUpdateAddress($db_connection, $_POST['to_country'], $_POST['to_city'], $_POST['to_street'], $_POST['to_street_number']); 
 
