@@ -13,6 +13,9 @@ if (!checkAuthentication()) {
     die ("Not logged in");
 }
 
+## Fetch connection to DB
+$db_connection = getDB();
+
 ## Prepare default or form values
 $statusShipment = '';
 $shipWeight = '';
@@ -51,8 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $errors_to_address = Address::getAddressErrs('Destination', $_POST['to_country'], $_POST['to_city'], $_POST['to_street'], $_POST['to_street_number']);
     if (empty($errors) && empty($errors_names) && empty($errors_from_address) && empty($errors_to_address)){
         
-        ## Fetch connection to DB
-        $db_connection = getDB();
+        
 
         $deliverFromUserId = User::getUserIdByFullName($deliver_from_full_name, $db_connection);
         $deliverToUserId = User::getUserIdByFullName($deliver_to_full_name, $db_connection);

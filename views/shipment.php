@@ -42,7 +42,6 @@ if (isset($_GET['id'])) {
 
 ## After fetching the shipment data
 if ($shipment !== null && isset($_GET['id'])) {
-    $db_connection = getDB();
     $deliver_from_full_name = $shipment['deliver_from_user_id'] ? User::getUserFullNameById($shipment['deliver_from_user_id'], $db_connection) : "Unknown Sender";
     $deliver_to_full_name = $shipment['deliver_to_user_id'] ? User::getUserFullNameById($shipment['deliver_to_user_id'], $db_connection) : "Recipient Not Registered";
     $deliverer_employee_name = $shipment['deliverer_user_id'] ? User::getUserFullNameById($shipment['deliverer_user_id'], $db_connection) : "No Driver Assigned";

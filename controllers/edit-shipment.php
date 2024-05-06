@@ -4,6 +4,8 @@ session_start();
 
 require '../includes/db.php';
 require '../classes/Shipment.php';
+require '../classes/User.php';
+require '../classes/Address.php';
 require '../includes/http.php';
 require '../includes/authentication.php';
 
@@ -21,20 +23,36 @@ if (!isset($_GET['id'])) {
 
 $shipment = Shipment::getShipment($db_connection, $_GET['id']);
 
-### Check if the shipment exists and handle permissions
 if ($shipment) {
     $shipmentId = $shipment['id'];
     $statusShipment = $shipment['statusShipment'];
+    
     $shipWeight = $shipment['ship_weight'];
     $passengerAmount = $shipment['passenger_amount'];
+    
     $dateSent = $shipment['date_sent'];
     $dateReceived = $shipment['date_received'];
+    
     $deliverFromUserId = $shipment['deliver_from_user_id'];
     $deliverToUserId = $shipment['deliver_to_user_id']; 
     $delivererUserId = $shipment['deliverer_user_id'];
     $registeredByUserId = $shipment['registered_by_user_id'];
+    
     $fromAddressId = $shipment['from_address_id'];
     $toAddressId = $shipment['to_address_id'];
+    
+    $fromAddress = Address::getAddress($db_connection, $fromAddressId);
+    $from_country = $fromAddress['country'];
+    $from_city = $fromAddress['city'];
+    $from_street = $fromAddress['street'];
+    $from_street_number = $fromAddress['street_number'];
+    
+    $toAddress = Address::getAddress($db_connection, $toAddressId);
+    $to_country = $toAddress['country'];
+    $to_city = $toAddress['city'];
+    $to_street = $toAddress['street'];
+    $to_street_number = $toAddress['street_number'];
+    
     $exactPrice = $shipment['exact_price'];
     $delivery_contact_info = $shipment['delivery_contact_info'];
     $isPaid = $shipment['is_paid'];
@@ -132,6 +150,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 $exactPrice = 0.00;
             }
+
+            ## Create or retrieve address
+            $fromAddressId = Address::createOrUpdateAddress($db_connection, $_POST['from_country'], $_POST['from_city'], $_POST['from_street'], $_POST['from_street_number']);
+            $toAddressId = Address::createOrUpdateAddress($db_connection, $_POST['to_country'], $_POST['to_city'], $_POST['to_street'], $_POST['to_street_number']); 
 
             mysqli_stmt_bind_param($prepared_query, 'ssiiiiiisdidii',
                 $statusShipment,
