@@ -2,6 +2,7 @@
 
 require 'includes/db.php';
 require 'includes/authentication.php';
+require 'includes/queries.php';
 require 'classes/Company.php';
 
 session_start();
@@ -9,45 +10,92 @@ session_start();
 ## Fetch connection to DB
 $db_connection = getDB();
 
-#
-#
-#
-## QUERIES
-## INITIALIZE $results variable according to the query defined from the links"query-links"
-# if the role is X and link is pressed, $results should be the query for that role and link
-# difference between admin and employee is that employee uses only his own company id
-#
-#
-
 if (checkAuthentication()) {
-    ### NB NB NB!!!! Admin needs to see all companies, employee only his own
-    if ($_SESSION['user_role'] == "admin") {
-        $results = mysqli_query($db_connection, "SELECT * FROM shipment ORDER BY date_sent DESC");
-    } else if ($_SESSION['user_role'] == "employee") {
-        $sql = "SELECT * FROM shipment WHERE company_id = ? ORDER BY date_sent DESC";
 
-        $prepared_query = mysqli_prepare($db_connection, $sql);
+    // Check for the query type parameter in the URL
+    $queryType = isset($_GET['query']) ? getQueryType($_GET['query']) : 'all';
 
-        if ($prepared_query === false) {
-            echo mysqli_error($db_connection);
-        } else {
-            mysqli_stmt_bind_param($prepared_query, "i", $_SESSION['company_id']);
-            mysqli_stmt_execute($prepared_query);
-            $results = mysqli_stmt_get_result($prepared_query);
-        }
-    } else {
-        $sql = "SELECT * FROM shipment WHERE deliver_from_user_id = ? OR deliver_to_user_id = ? ORDER BY date_sent DESC";
+    // IDs from the GET parameters
+    $query_registered_by_user_id = isset($_GET['registered_by_user_id']) ? (int)$_GET['registered_by_user_id'] : null;
+    $query_deliver_from_user_id = isset($_GET['deliver_from_user_id']) ? (int)$_GET['deliver_from_user_id'] : null;
+    $query_deliver_to_user_id = isset($_GET['deliver_to_user_id']) ? (int)$_GET['deliver_to_user_id'] : null;
 
-        $prepared_query = mysqli_prepare($db_connection, $sql);
+    switch ($queryType) {
+        case 'by_employee':
+            $sql = "SELECT * FROM shipment WHERE registered_by_user_id = ? ORDER BY date_sent DESC";
+            $prepared_query = mysqli_prepare($db_connection, $sql);
 
-        if ($prepared_query === false) {
-            echo mysqli_error($db_connection);
-        } else {
-            mysqli_stmt_bind_param($prepared_query, "ii", $_SESSION['user_id'], $_SESSION['user_id']);
-            mysqli_stmt_execute($prepared_query);
-            $results = mysqli_stmt_get_result($prepared_query);
-        }
+            if ($prepared_query === false) {
+                echo mysqli_error($db_connection);
+            } else {
+                mysqli_stmt_bind_param($prepared_query, "i", $query_registered_by_user_id);
+                mysqli_stmt_execute($prepared_query);
+                $results = mysqli_stmt_get_result($prepared_query);
+            }
+            break;
+        case 'sent':
+            $sql = "SELECT * FROM shipment WHERE statusShipment = 'Sent' ORDER BY date_sent DESC";
+            $prepared_query = mysqli_prepare($db_connection, $sql);
+            if ($prepared_query === false) {
+                echo mysqli_error($db_connection);
+            } else {
+                mysqli_stmt_execute($prepared_query);
+                $results = mysqli_stmt_get_result($prepared_query);
+            }
+            break;
+        case 'by_sender':
+            $sql = "SELECT * FROM shipment WHERE deliver_from_user_id = ? ORDER BY date_sent DESC";
+            $prepared_query = mysqli_prepare($db_connection, $sql);
+            if ($prepared_query === false) {
+                echo mysqli_error($db_connection);
+            } else {
+                mysqli_stmt_bind_param($prepared_query, "i", $query_deliver_from_user_id);
+                mysqli_stmt_execute($prepared_query);
+                $results = mysqli_stmt_get_result($prepared_query);
+            }
+            break;
+        case 'received':
+            $sql = "SELECT * FROM shipment WHERE statusShipment = 'Completed' AND deliver_to_user_id = ? AND is_paid = 1 ORDER BY date_sent DESC";
+            $prepared_query = mysqli_prepare($db_connection, $sql);
+            if ($prepared_query === false) {
+                echo mysqli_error($db_connection);
+            } else {
+                mysqli_stmt_bind_param($prepared_query, "i", $query_deliver_to_user_id);
+                mysqli_stmt_execute($prepared_query);
+                $results = mysqli_stmt_get_result($prepared_query);
+            }
+            break;
+        case 'all':
+        default:
+            ## Admin sees shipments for all companies, employee only for his own
+            if ($_SESSION['user_role'] == "admin") {
+                $results = mysqli_query($db_connection, "SELECT * FROM shipment ORDER BY date_sent DESC");
+            } else if ($_SESSION['user_role'] == "employee") {
+                $sql = "SELECT * FROM shipment WHERE company_id = ? ORDER BY date_sent DESC";
+                $prepared_query = mysqli_prepare($db_connection, $sql);
+
+                if ($prepared_query === false) {
+                    echo mysqli_error($db_connection);
+                } else {
+                    mysqli_stmt_bind_param($prepared_query, "i", $_SESSION['company_id']);
+                    mysqli_stmt_execute($prepared_query);
+                    $results = mysqli_stmt_get_result($prepared_query);
+                }
+            } else {
+                $sql = "SELECT * FROM shipment WHERE deliver_from_user_id = ? OR deliver_to_user_id = ? ORDER BY date_sent DESC";
+                $prepared_query = mysqli_prepare($db_connection, $sql);
+
+                if ($prepared_query === false) {
+                    echo mysqli_error($db_connection);
+                } else {
+                    mysqli_stmt_bind_param($prepared_query, "ii", $_SESSION['user_id'], $_SESSION['user_id']);
+                    mysqli_stmt_execute($prepared_query);
+                    $results = mysqli_stmt_get_result($prepared_query);
+                }
+            }
+            break;
     }
+
 }
 
 ## Check if query found anything
@@ -82,23 +130,37 @@ if ($results != null) {
 <?php endif; ?>
 </div>
 
-<!-- Add query buttons for admin and employee roles -->
-<!-- Buttons: All shipments(default defined in $results variable) -->
-<!-- All shipments registed by registered_by_user_id, specified using employee user full_name -->
-<!-- All shipments with status 'Sent' -->
-<!-- All shipments by deliver_from_user_id, specified using user full_name -->
-<!-- All shipments with status 'Received' and deliver_to_user_id, specifiued using user full_name -->
-<!-- For admin, no company id needs to be specified, for employee, the session variable  $_SESSION['company_id'] always needs to be used -->
 <div class="query-links">
-<?php if ($_SESSION['user_role'] == "admin" || $_SESSION['user_role'] == "employee"): ?>
-    <h3> Queries </h3>
-    <a href="index.php">All shipments</a><br>
-    <a href="index.php">All shipments by employee</a><br>
-    <a href="index.php">All shipments 'Sent'</a><br>
-    <a href="index.php">All shipments by Sender</a><br>
-    <a href="index.php">All shipments 'Received' by Recipient</a><br>
-<?php endif; ?>
+    <?php if ($_SESSION['user_role'] == "admin" || $_SESSION['user_role'] == "employee"): ?>
+    <h3>Queries</h3>
+    <!-- All Shipments -->
+    <a href="index.php?query=all">All registered shipments</a><br>
+    <!-- Shipments 'Sent' -->
+    <a href="index.php?query=sent">All shipments with status 'Sent' / Not received yet </a><br>
+
+    <!-- Shipments by Employee -->
+    <form action="index.php" method="get">
+        <input type="hidden" name="query" value="by_employee">
+        <input type="text" name="registered_by_user_id" placeholder="All Shipments registered by a user (ID)">
+        <button type="submit">Submit</button>
+    </form><br>
+
+    <!-- Shipments by Sender -->
+    <form action="index.php" method="get">
+        <input type="hidden" name="query" value="by_sender">
+        <input type="text" name="deliver_from_user_id" placeholder="All shipments sent by a user (ID)">
+        <button type="submit">Submit</button>
+    </form><br>
+
+    <!-- Shipments 'Received' by Recipient -->
+    <form action="index.php" method="get">
+        <input type="hidden" name="query" value="received">
+        <input type="text" name="deliver_to_user_id" placeholder="All shipments received by a user (ID)">
+        <button type="submit">Submit</button>
+    </form><br>
+    <?php endif; ?>
 </div>
+
 <div class="management-links">
 <?php if ($_SESSION['user_role'] == "admin" || $_SESSION['user_role'] == "employee"): ?>
     <h3> Management </h3>
