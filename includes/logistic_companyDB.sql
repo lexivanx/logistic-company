@@ -55,12 +55,14 @@ create table shipment (
     delivery_contact_info VARCHAR(255) DEFAULT NULL,
     exact_price DECIMAL(10,2) NOT NULL,
     is_paid BOOLEAN DEFAULT FALSE,
+    company_id INT DEFAULT 1,
     FOREIGN KEY (deliver_from_user_id) REFERENCES user(id),
     FOREIGN KEY (deliver_to_user_id) REFERENCES user(id),
     FOREIGN KEY (deliverer_user_id) REFERENCES user(id),
     FOREIGN KEY (registered_by_user_id) REFERENCES user(id),
     FOREIGN KEY (from_address_id) REFERENCES address(id),
-    FOREIGN KEY (to_address_id) REFERENCES address(id)
+    FOREIGN KEY (to_address_id) REFERENCES address(id),
+    FOREIGN KEY (company_id) REFERENCES company(id)
 );
 
 create table role (

@@ -2,6 +2,7 @@
 
 require 'includes/db.php';
 require 'includes/authentication.php';
+require 'classes/Company.php';
 
 session_start();
 
@@ -23,7 +24,17 @@ if (checkAuthentication()) {
     if ($_SESSION['user_role'] == "admin") {
         $results = mysqli_query($db_connection, "SELECT * FROM shipment ORDER BY date_sent DESC");
     } else if ($_SESSION['user_role'] == "employee") {
-        $results = mysqli_query($db_connection, "SELECT * FROM shipment ORDER BY date_sent DESC");
+        $sql = "SELECT * FROM shipment WHERE company_id = ? ORDER BY date_sent DESC";
+
+        $prepared_query = mysqli_prepare($db_connection, $sql);
+
+        if ($prepared_query === false) {
+            echo mysqli_error($db_connection);
+        } else {
+            mysqli_stmt_bind_param($prepared_query, "i", $_SESSION['company_id']);
+            mysqli_stmt_execute($prepared_query);
+            $results = mysqli_stmt_get_result($prepared_query);
+        }
     } else {
         $sql = "SELECT * FROM shipment WHERE deliver_from_user_id = ? OR deliver_to_user_id = ? ORDER BY date_sent DESC";
 
@@ -80,6 +91,7 @@ if ($results != null) {
 <!-- For admin, no company id needs to be specified, for employee, the session variable  $_SESSION['company_id'] always needs to be used -->
 <div class="query-links">
 <?php if ($_SESSION['user_role'] == "admin" || $_SESSION['user_role'] == "employee"): ?>
+    <h3> Queries </h3>
     <a href="index.php">All shipments</a><br>
     <a href="index.php">All shipments by employee</a><br>
     <a href="index.php">All shipments 'Sent'</a><br>
@@ -87,6 +99,16 @@ if ($results != null) {
     <a href="index.php">All shipments 'Received' by Recipient</a><br>
 <?php endif; ?>
 </div>
+<div class="management-links">
+<?php if ($_SESSION['user_role'] == "admin" || $_SESSION['user_role'] == "employee"): ?>
+    <h3> Management </h3>
+    <a href="employee.php">Addresses and prices</a><br>
+<?php endif; ?>
+<?php if ($_SESSION['user_role'] == "admin"): ?>
+    <a href="admin.php">Company administration</a><br>
+<?php endif; ?>
+</div>
+
 
 
 <?php if (!checkAuthentication()): ?>
@@ -108,6 +130,9 @@ if ($results != null) {
                 <p>Date sent: <?= htmlspecialchars(date("Y-m-d H:i:s", strtotime($shipment['date_sent'])), ENT_QUOTES, 'UTF-8'); ?></p>
                 <p>Exact Price: <?= htmlspecialchars($shipment['exact_price'], ENT_QUOTES, 'UTF-8'); ?> BGN</p>
                 <p>Is Paid: <?= $shipment['is_paid'] ? 'Yes' : 'No'; ?></p>
+                <?php if ($_SESSION['user_role'] == "admin"): ?>
+                    <p>Company: <?= Company::getCompany($db_connection, $shipment['company_id'], 'company_name')['company_name'] ?></p>
+                <?php endif; ?>
             </shipment>
         </li>
     <?php } ?>

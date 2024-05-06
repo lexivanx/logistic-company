@@ -6,5 +6,6 @@
 ## query for revenue for a specific period
 ## query for all customers
 ## query for all employees
+## revenue for this company
 
 ?>

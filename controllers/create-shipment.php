@@ -33,6 +33,9 @@ $delivery_contact_info = '';
 ### Check if form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
+    ## Set 
+    $shipment_company_id = $_SESSION['company_id'];
+
     ## Prepare form values from POST and default
     ## saves values if form is resubmitted with errors
     $statusShipment = 'New';
@@ -74,8 +77,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $prepared_query = mysqli_prepare($db_connection, "INSERT INTO shipment (statusShipment, ship_weight, 
         passenger_amount, date_sent, deliver_from_user_id, deliver_to_user_id, deliverer_user_id, 
-        registered_by_user_id, from_address_id, to_address_id, delivery_contact_info, exact_price, is_paid) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        registered_by_user_id, from_address_id, to_address_id, delivery_contact_info, exact_price, is_paid, company_id) 
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
         ## Check for error in query
         if ($prepared_query === false) {
@@ -138,10 +141,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $toAddressId = Address::createOrUpdateAddress($db_connection, $_POST['to_country'], $_POST['to_city'], $_POST['to_street'], $_POST['to_street_number']);
             
             # Handle quotes, escape characters, SQL injection etc
-            mysqli_stmt_bind_param($prepared_query, "sdisiiiiiisdi", 
+            mysqli_stmt_bind_param($prepared_query, "sdisiiiiiisdii", 
                 $statusShipment, $shipWeight, $passengerAmount, $dateSent, 
                 $deliverFromUserId, $deliverToUserId, $delivererUserId, $registeredByUserId, 
-                $fromAddressId, $toAddressId, $delivery_contact_info, $exactPrice, $isPaid);
+                $fromAddressId, $toAddressId, $delivery_contact_info, $exactPrice, $isPaid, $shipment_company_id);
 
 
             if (mysqli_stmt_execute($prepared_query)) {

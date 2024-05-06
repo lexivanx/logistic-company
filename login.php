@@ -3,13 +3,15 @@
 require 'includes/http.php';
 require 'classes/User.php';
 require 'includes/db.php';
+require 'classes/Company.php';
 
 session_start();
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+ ## Fetch connection to DB
+ $db_connection = getDB();
+ $companies = Company::getAllCompanies($db_connection);
 
-    ## Fetch connection to DB
-    $db_connection = getDB();
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if(User::userAuth($_POST['username'], $_POST['password'], $db_connection)) {
 
@@ -25,9 +27,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $_SESSION['full_name'] = User::getUserFullNameById($_SESSION['user_id'], $db_connection);
 
         ## Set only for employees for filtering purposes
-        if ($_SESSION['user_role'] == "employee") {
-            $_SESSION['company_id'] = User::getCompanyIdByUserId($_SESSION['user_id'], $db_connection);
-        } 
+        ##if ($_SESSION['user_role'] == "employee") {
+        ##    $_SESSION['company_id'] = User::getCompanyIdByUserId($_SESSION['user_id'], $db_connection);
+        ##} 
+
+        $_SESSION['company_id'] = $_POST['login_company_id'];
 
         redirectToPath('/logistic-company/index.php');
 
@@ -61,6 +65,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div>
         <label for="password">Password</label>
         <input type="password" name="password" id="password">
+    </div>
+
+    <div>
+        <label for="login_company_id">Company</label>
+        <select name="login_company_id" id="login_company_id">
+            <?php foreach ($companies as $company) : ?>
+                <option value="<?= $company['id'] ?>"><?= htmlspecialchars($company['company_name']) ?></option>
+            <?php endforeach; ?>
+        </select>
     </div>
 
     <button type="submit">Login</button>
