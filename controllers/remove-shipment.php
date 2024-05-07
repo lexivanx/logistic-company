@@ -25,7 +25,7 @@ $shipment = Shipment::getShipment($db_connection, $_GET['id']);
 if ($shipment) {
     $id = $shipment['id'];
 
-    if  ($_SESSION['user_role'] != "admin" && $_SESSION['user_role'] != "employee") {
+    if ($_SESSION['user_role'] != "admin" && $_SESSION['user_role'] != "employee") {
         die("You don't have permission to edit or remove");
     }
 } else {

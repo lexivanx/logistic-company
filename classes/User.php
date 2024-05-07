@@ -166,5 +166,31 @@ class User {
         return $errors;
     }
 
+    ## Function to fetch customers
+    public static function fetchCustomers($db) {
+        $sql = "SELECT u.id, u.username, u.full_name 
+            FROM user u 
+            JOIN role r ON u.id = r.user_id 
+            WHERE r.role_name = 'customer'";
+        $result = mysqli_query($db, $sql);
+        if (!$result) {
+            die('MySQL error: ' . mysqli_error($db));
+        }
+        return mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+
+    ## Function to fetch employees
+    public static function fetchEmployees($db) {
+        $sql = "SELECT u.id, u.username, u.office_id, u.full_name 
+            FROM user u 
+            JOIN role r ON u.id = r.user_id 
+            WHERE r.role_name = 'employee'";
+        $result = mysqli_query($db, $sql);
+        if (!$result) {
+            die('MySQL error: ' . mysqli_error($db));
+        }
+        return mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+
 }
 ?>

@@ -8,12 +8,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $username = $_POST['username'] ?? '';
     $password = $_POST['password'] ?? '';
+    $full_name = $_POST['full_name'] ?? '';
 
     $error = '';
 
     // Basic validation for user and pass
-    if (!$username || !$password) {
-        $error = 'Username and password are required';
+    if (!$username || !$password || !$full_name) {
+        $error = 'Username, password and full name are required';
     } elseif (!preg_match('/^[a-zA-Z0-9]+$/', $username)) {
         $error = 'Username should only contain letters and numbers';
     } else {
@@ -32,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $error = 'Username already exists. Please choose a different username.';
         } else {
             // Prepare the query
-            $prepared_query = mysqli_prepare($db_connection, "INSERT INTO user (username, password) VALUES (?, ?)");
+            $prepared_query = mysqli_prepare($db_connection, "INSERT INTO user (username, password, full_name) VALUES (?, ?, ?)");
 
             if ($prepared_query === false) {
                 $error = mysqli_error($db_connection);
@@ -41,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
                 // Bind and execute
-                mysqli_stmt_bind_param($prepared_query, "ss", $username, $hashed_password);
+                mysqli_stmt_bind_param($prepared_query, "sss", $username, $hashed_password, $full_name);
 
                 // Redirect or show success message
                 if (mysqli_stmt_execute($prepared_query)) {
@@ -50,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $role_query = mysqli_prepare($db_connection, "INSERT INTO role (role_name, user_id) VALUES ('customer', ?)");
                     mysqli_stmt_bind_param($role_query, "i", $user_id);
                     mysqli_stmt_execute($role_query);
-                    header("Location: success-page.php"); // Redirect to a success page
+                    header("Location: views/success-page.php"); // Redirect to a success page
                     exit;
                 } else {
                     $error = mysqli_stmt_error($prepared_query);
@@ -83,6 +84,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <div>
     <label for="password">Password</label>
     <input type="password" name="password" id="password">
+</div>
+
+<div>
+    <label for="full_name">Full name</label>
+    <input type="text" name="full_name" id="full_name">
 </div>
 
 <button type="submit">Register</button>

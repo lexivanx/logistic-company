@@ -24,8 +24,13 @@ if (isset($_GET['id'])) {
             echo "Failed to prepare the query: " . mysqli_error($db_connection);
             exit;
         }
+
+        if ($shipment['is_paid'] == 0) {
+            $statusShipment = 'Cancelled';
+        } else {
+            $statusShipment = 'Completed';
+        }
     
-        $statusShipment = 'Completed';
         $dateReceived = date('Y-m-d H:i:s'); // Current date and time
     
         // Bind parameters and execute
@@ -102,7 +107,7 @@ if ($shipment !== null && isset($_GET['id'])) {
             <div>
             <p>Delivery Contact Info: <?php if ($shipment['delivery_contact_info']) { echo htmlspecialchars($shipment['delivery_contact_info'], ENT_QUOTES, 'UTF-8'); } else { echo "Not provided"; } ?></p>
             <p>Exact Price: <?= htmlspecialchars($shipment['exact_price'], ENT_QUOTES, 'UTF-8'); ?></p>
-            <p>Is Paid: <?= $shipment['is_paid'] ? 'Yes' : 'No'; ?></p>
+            <p>Is Paid: <?= $shipment['is_paid'] ? 'Yes' : 'No (complete to cancel)'; ?></p>
             </div>
         </shipment>
 
@@ -114,7 +119,7 @@ if ($shipment !== null && isset($_GET['id'])) {
                 <br>
                 <p><em>Can't edit or remove!</em></p>
             <?php endif; ?>
-            <?php if ($shipment['statusShipment'] != "Completed"): ?>
+            <?php if (($shipment['statusShipment'] != "Completed") && ($shipment['statusShipment'] != "Cancelled")): ?>
             <form method="POST" action="/logistic-company/views/shipment.php?id=<?= $shipment['id']; ?>">
                 <input type="hidden" name="shipment_id" value="<?= $shipment['id']; ?>">
                 <input type="hidden" name="update_action" value="mark_completed">
