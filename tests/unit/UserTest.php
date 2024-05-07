@@ -1,5 +1,5 @@
 <?php
-require_once '/classes/User.php';
+require_once __DIR__ . '/../../classes/User.php';
 
 use PHPUnit\Framework\TestCase;
 
