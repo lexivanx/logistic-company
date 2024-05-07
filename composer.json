@@ -1,9 +1,6 @@
 {
     "name": "lexkenn/logistic-company",
     "description": "A web application for a logistic company",
-    "require": {
-        "monolog/monolog": "^2.0"
-    },
     "require-dev": {
         "phpunit/phpunit": "^9.0"
     },
