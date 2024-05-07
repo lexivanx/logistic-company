@@ -3,9 +3,6 @@ require_once '../../classes/User.php';
 
 use PHPUnit\Framework\TestCase;
 
-<?php
-use PHPUnit\Framework\TestCase;
-
 class UserTest extends TestCase
 {
     protected $db; // Mock of the database connection
@@ -109,3 +106,4 @@ class UserTest extends TestCase
 
 }
 
+?>
