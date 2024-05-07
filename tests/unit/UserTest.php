@@ -37,6 +37,15 @@ class UserTest extends TestCase
         $this->dbMock = $dbMock;
     }
 
+    private function getDummyResult() {
+        // Create a mock for mysqli_result
+        $resultMock = $this->getMockBuilder(mysqli_result::class)
+                           ->disableOriginalConstructor()
+                           ->getMock();
+        $resultMock->method('fetch_assoc')->willReturn(['column' => 'value']);
+        return $resultMock;
+    }
+
     // Example test method
     public function testUserAuthReturnsTrueWhenUserAndPassAreCorrect() {
         $username = 'testuser';
