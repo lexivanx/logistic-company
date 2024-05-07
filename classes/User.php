@@ -193,28 +193,45 @@ class User {
     }
 
     ## Update user
-    public static function updateUser($db_connection, $user_id, $password = null, $office_id) {
-        if ($password === null) {
-            $sql_query = "UPDATE user SET office_id = ? WHERE id = ?";
-            $stmt = mysqli_prepare($db_connection, $sql_query);
-            if ($stmt === false) {
-                echo mysqli_error($db_connection);
-            } else {
-                mysqli_stmt_bind_param($stmt, "ii", $office_id, $user_id);
-                mysqli_stmt_execute($stmt);
-            }
-        } else {
-            $sql_query = "UPDATE user SET password = ?, office_id = ? WHERE id = ?";
-            $stmt = mysqli_prepare($db_connection, $sql_query);
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            if ($stmt === false) {
-                echo mysqli_error($db_connection);
-            } else {
-                mysqli_stmt_bind_param($stmt, "sii", $hashed_password, $office_id, $user_id);
-                mysqli_stmt_execute($stmt);
-            }
+    public static function updateUser($db, $user_id, $password = null, $office_id = null) {
+        if (empty($user_id)) {
+            echo "Error: User ID is required.";
+            return;
         }
-    }    
+
+        $sql = "UPDATE user SET ";
+        $params = [];
+        $types = "";
+
+        if (!empty($password)) {
+            $sql .= "password = ?, ";
+            $params[] = password_hash($password, PASSWORD_DEFAULT);
+            $types .= "s";
+        }
+        if (!empty($office_id)) {
+            $sql .= "office_id = ?, ";
+            $params[] = $office_id;
+            $types .= "i";
+        }
+
+        $sql = rtrim($sql, ", ");
+        $sql .= " WHERE id = ?";
+        $params[] = $user_id;
+        $types .= "i";
+
+        $stmt = mysqli_prepare($db, $sql);
+        if (!$stmt) {
+            echo "SQL error: " . mysqli_error($db);
+            return;
+        }
+
+        mysqli_stmt_bind_param($stmt, $types, ...$params);
+        mysqli_stmt_execute($stmt);
+
+        if (mysqli_stmt_affected_rows($stmt) == 0) {
+            echo "No changes made or user not found.";
+        }
+    }  
 
 }
 ?>

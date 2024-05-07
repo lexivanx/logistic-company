@@ -48,7 +48,7 @@ class Address{
     ### If it exists, return the address ID
     ### If it does not exist, create a new address and return the new address ID
     public static function createOrUpdateAddress($db_connection, $country, $city, $street, $street_number) {
-        $sql_query = "SELECT id FROM address WHERE country = ? AND city = ? AND street = ? AND street_number = ?";
+        $sql_query = "SELECT id FROM address WHERE country = ? AND city = ? AND street = ? AND street_number = ? AND location_type = 'private'";
 
         $prepared_query = mysqli_prepare($db_connection, $sql_query);
 
@@ -79,8 +79,32 @@ class Address{
                 }
             }
         }
-        
+    }
 
+    public static function fetchAllAddresses($db_connection) {
+        $sql_query = "SELECT * FROM address";
+        $result = mysqli_query($db_connection, $sql_query);
+        while ($row = mysqli_fetch_assoc($result)) {
+            echo "<p><strong>ID:</strong> {$row['id']}, <strong>Type:</strong> {$row['location_type']}, 
+            <strong>Country:</strong> {$row['country']}, <strong>City:</strong> {$row['city']}, 
+            <strong>Street:</strong> {$row['street']}, <strong>Number:</strong> {$row['street_number']}</p>";
+        }
+    }
+
+    public static function setLocationTypeToOffice($db_connection, $address_id) {
+        $sql_query = "UPDATE address SET location_type = 'office' WHERE id = ?";
+        $prepared_query = mysqli_prepare($db_connection, $sql_query);
+
+        if ($prepared_query === false) {
+            echo mysqli_error($db_connection);
+        } else {
+            mysqli_stmt_bind_param($prepared_query, 'i', $address_id);
+            if (mysqli_stmt_execute($prepared_query)) {
+                echo "Location type set to office";
+            } else {
+                echo mysqli_stmt_error($prepared_query);
+            }
+        }
     }
 
 }

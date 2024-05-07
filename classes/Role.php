@@ -27,31 +27,37 @@ class Role {
     public static function handleRole($db, $role_name, $user_id, $role_id = null) {
         if (empty($role_id)) {
             // Add new role
+            if (empty($role_name) || empty($user_id)) {
+                echo "Error: Role name and user ID are required.";
+                return;
+            }
             $sql = "INSERT INTO role (role_name, user_id) VALUES (?, ?)";
+            $stmt = mysqli_prepare($db, $sql);
+            mysqli_stmt_bind_param($stmt, "si", $role_name, $user_id);
         } else {
             // Update existing role
             $sql = "UPDATE role SET role_name = ?, user_id = ? WHERE id = ?";
-        }
-        $stmt = mysqli_prepare($db, $sql);
-        if ($stmt === false) {
-            echo mysqli_error($db);
-            return;
-        }
-    
-        if (empty($role_id)) {
-            mysqli_stmt_bind_param($stmt, "si", $role_name, $user_id);
-        } else {
+            $stmt = mysqli_prepare($db, $sql);
             mysqli_stmt_bind_param($stmt, "sii", $role_name, $user_id, $role_id);
         }
+
+        if (!$stmt) {
+            echo "SQL error: " . mysqli_error($db);
+            return;
+        }
+
         mysqli_stmt_execute($stmt);
+        if (mysqli_stmt_affected_rows($stmt) == 0) {
+            echo "No changes made or role not found.";
+        }
     }
 
     ## For admins - print all roles
-    function fetchAllRoles($db) {
+    public static function fetchAllRoles($db) {
         $sql = "SELECT * FROM role";
         $result = mysqli_query($db, $sql);
         while ($row = mysqli_fetch_assoc($result)) {
-            echo "<p>ID: {$row['id']}, Role: {$row['role_name']}, User ID: {$row['user_id']}</p>";
+            echo "<p><strong>ID:</strong> {$row['id']}, <strong>Role:</strong> {$row['role_name']}, <strong>User ID:</strong> {$row['user_id']}</p>";
         }
     }
 

@@ -41,23 +41,29 @@ class Company {
     public static function handleCompany($db, $company_name, $company_id = null) {
         if (empty($company_id)) {
             // Add new company
+            if (empty($company_name)) {
+                echo "Error: Company name is required.";
+                return;
+            }
             $sql = "INSERT INTO company (company_name) VALUES (?)";
+            $stmt = mysqli_prepare($db, $sql);
+            mysqli_stmt_bind_param($stmt, "s", $company_name);
         } else {
             // Update existing company
             $sql = "UPDATE company SET company_name = ? WHERE id = ?";
-        }
-        $stmt = mysqli_prepare($db, $sql);
-        if ($stmt === false) {
-            echo mysqli_error($db);
-            return;
-        }
-    
-        if (empty($company_id)) {
-            mysqli_stmt_bind_param($stmt, "s", $company_name);
-        } else {
+            $stmt = mysqli_prepare($db, $sql);
             mysqli_stmt_bind_param($stmt, "si", $company_name, $company_id);
         }
+
+        if (!$stmt) {
+            echo "SQL error: " . mysqli_error($db);
+            return;
+        }
+
         mysqli_stmt_execute($stmt);
+        if (mysqli_stmt_affected_rows($stmt) == 0) {
+            echo "No changes made or company not found.";
+        }
     }
 
     ## For admins - print all companies
@@ -65,7 +71,7 @@ class Company {
         $sql = "SELECT * FROM company";
         $result = mysqli_query($db, $sql);
         while ($row = mysqli_fetch_assoc($result)) {
-            echo "<p>ID: {$row['id']}, Name: {$row['company_name']}</p>";
+            echo "<p><strong>ID:</strong> {$row['id']}, <strong>Name:</strong> {$row['company_name']}</p>";
         }
     }
 

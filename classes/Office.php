@@ -24,34 +24,66 @@ class Office {
     }
 
     ## Add or update(if id is specified)
-    public static function handleOffice($db, $office_name, $company_id, $address_id, $office_id = null) {
+    public static function handleOffice($db, $office_name, $company_id = null, $address_id = null, $office_id = null) {
         if (empty($office_id)) {
             // Add new office
+            if (empty($office_name) || empty($company_id) || empty($address_id)) {
+                echo "Error: All fields are required to create a new office.";
+                return;
+            }
             $sql = "INSERT INTO office (office_name, company_id, address_id) VALUES (?, ?, ?)";
-        } else {
-            // Update existing office
-            $sql = "UPDATE office SET office_name = ?, company_id = ?, address_id = ? WHERE id = ?";
-        }
-        $stmt = mysqli_prepare($db, $sql);
-        if ($stmt === false) {
-            echo mysqli_error($db);
-            return;
-        }
-    
-        if (empty($office_id)) {
+            $stmt = mysqli_prepare($db, $sql);
             mysqli_stmt_bind_param($stmt, "sii", $office_name, $company_id, $address_id);
         } else {
-            mysqli_stmt_bind_param($stmt, "siii", $office_name, $company_id, $address_id, $office_id);
+            // Update existing office, only if fields are provided
+            $sql = "UPDATE office SET ";
+            $params = [];
+            $types = "";
+
+            if (!empty($office_name)) {
+                $sql .= "office_name = ?, ";
+                $params[] = $office_name;
+                $types .= "s";
+            }
+            if (!empty($company_id)) {
+                $sql .= "company_id = ?, ";
+                $params[] = $company_id;
+                $types .= "i";
+            }
+            if (!empty($address_id)) {
+                $sql .= "address_id = ?, ";
+                $params[] = $address_id;
+                $types .= "i";
+            }
+
+            // Remove the last comma and space
+            $sql = rtrim($sql, ", ");
+            $sql .= " WHERE id = ?";
+            $params[] = $office_id;
+            $types .= "i";
+
+            $stmt = mysqli_prepare($db, $sql);
+            if (!$stmt) {
+                echo "SQL error: " . mysqli_error($db);
+                return;
+            }
+
+            mysqli_stmt_bind_param($stmt, $types, ...$params);
+            mysqli_stmt_execute($stmt);
         }
-        mysqli_stmt_execute($stmt);
+
+        if ($stmt && mysqli_stmt_affected_rows($stmt) == 0) {
+            echo "No changes made or office not found.";
+        }
     }
 
     ## For admins - print all offices
-    function fetchAllOffices($db) {
+    public static function fetchAllOffices($db) {
         $sql = "SELECT o.id, o.office_name, c.company_name, o.address_id FROM office o JOIN company c ON o.company_id = c.id";
         $result = mysqli_query($db, $sql);
         while ($row = mysqli_fetch_assoc($result)) {
-            echo "<p>ID: {$row['id']}, Office: {$row['office_name']}, Company: {$row['company_name']}, Address ID: {$row['address_id']}</p>";
+            echo "<p><strong>ID:</strong> {$row['id']}, <strong>Office:</strong> {$row['office_name']}, 
+            <strong>Company:</strong> {$row['company_name']}, <strong>Address ID:</strong> {$row['address_id']}</p>";
         }
     }
 
