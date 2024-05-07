@@ -10,11 +10,13 @@ class UserTest extends TestCase
     protected function setUp(): void {
         parent::setUp();
         $this->db = $this->getMockBuilder(mysqli::class)
-                        ->disableOriginalConstructor()  // Prevent constructor from running.
+                        ->disableOriginalConstructor()
                         ->getMock();
 
         // Ensure that methods that could close the connection are stubbed out if not needed for the test.
         $this->db->method('close')->willReturn(true);
+        $this->db->method('kill')->willReturn(true);
+        $this->db->method('rollback')->willReturn(true);
     }
 
 
