@@ -1,0 +1,10 @@
+{
+    "name": "your-vendor-name/your-project-name",
+    "description": "A brief description of your project",
+    "require": {
+        "monolog/monolog": "^2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.0"
+    }
+}
