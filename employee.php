@@ -21,14 +21,14 @@ if (!checkAuthentication() || ($_SESSION['user_role'] != "admin" && $_SESSION['u
 ?>
 
 <?php require 'includes/header.php'; ?>
-<h3>Employee Portal</h3>
+<h2>Employee Portal</h2>
 
 <?php
     $customers = User::fetchCustomers($db_connection);
     $employees = User::fetchEmployees($db_connection);
 
     ## Display customers
-    echo "<h2>Customers</h2>";
+    echo "<h3>Customers</h3>";
     if (!empty($customers)) {
         foreach ($customers as $customer) {
             echo "<p>ID: {$customer['id']}, Username: {$customer['username']}, Full Name: {$customer['full_name']}</p>";
@@ -38,7 +38,7 @@ if (!checkAuthentication() || ($_SESSION['user_role'] != "admin" && $_SESSION['u
     }
 
     ## Display Employees
-    echo "<h2>Employees</h2>";
+    echo "<h3>Employees</h3>";
     if (!empty($employees)) {
         foreach ($employees as $employee) {
             $office = Office::getOffice($db_connection, $employee['office_id'], 'office_name');

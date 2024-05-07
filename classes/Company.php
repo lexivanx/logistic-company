@@ -37,5 +37,37 @@ class Company {
         }
     }
 
+    ## Add or update(if id is specified)
+    public static function handleCompany($db, $company_name, $company_id = null) {
+        if (empty($company_id)) {
+            // Add new company
+            $sql = "INSERT INTO company (company_name) VALUES (?)";
+        } else {
+            // Update existing company
+            $sql = "UPDATE company SET company_name = ? WHERE id = ?";
+        }
+        $stmt = mysqli_prepare($db, $sql);
+        if ($stmt === false) {
+            echo mysqli_error($db);
+            return;
+        }
+    
+        if (empty($company_id)) {
+            mysqli_stmt_bind_param($stmt, "s", $company_name);
+        } else {
+            mysqli_stmt_bind_param($stmt, "si", $company_name, $company_id);
+        }
+        mysqli_stmt_execute($stmt);
+    }
+
+    ## For admins - print all companies
+    public static function fetchAllCompanies($db) {
+        $sql = "SELECT * FROM company";
+        $result = mysqli_query($db, $sql);
+        while ($row = mysqli_fetch_assoc($result)) {
+            echo "<p>ID: {$row['id']}, Name: {$row['company_name']}</p>";
+        }
+    }
+
 }
 ?>

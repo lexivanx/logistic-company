@@ -192,5 +192,29 @@ class User {
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
 
+    ## Update user
+    public static function updateUser($db_connection, $user_id, $password = null, $office_id) {
+        if ($password === null) {
+            $sql_query = "UPDATE user SET office_id = ? WHERE id = ?";
+            $stmt = mysqli_prepare($db_connection, $sql_query);
+            if ($stmt === false) {
+                echo mysqli_error($db_connection);
+            } else {
+                mysqli_stmt_bind_param($stmt, "ii", $office_id, $user_id);
+                mysqli_stmt_execute($stmt);
+            }
+        } else {
+            $sql_query = "UPDATE user SET password = ?, office_id = ? WHERE id = ?";
+            $stmt = mysqli_prepare($db_connection, $sql_query);
+            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+            if ($stmt === false) {
+                echo mysqli_error($db_connection);
+            } else {
+                mysqli_stmt_bind_param($stmt, "sii", $hashed_password, $office_id, $user_id);
+                mysqli_stmt_execute($stmt);
+            }
+        }
+    }    
+
 }
 ?>
