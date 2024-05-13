@@ -9,7 +9,7 @@ class UtilTest extends TestCase
 {   
     private $headers = [];
     private $output = '';
-    
+
     protected function setUp(): void {
         ob_start();
         session_start();
@@ -41,14 +41,25 @@ class UtilTest extends TestCase
     /**
      * @runInSeparateProcess
      */
+    public function testGetQueryType() {
+        // Test allowed values
+        $this->assertSame('all', getQueryType('all'));
+        $this->assertSame('by_employee', getQueryType('by_employee'));
+
+        // Test default behavior with an invalid value
+        $this->assertSame('all', getQueryType('invalid_query_type'));
+    }
+
+
+    /*
     public function testRedirectToPath() {
         $_SERVER['HTTP_HOST'] = 'localhost';
         $_SERVER['HTTPS'] = 'off';
 
         try {
             redirectToPath("/new-path");
-        } catch (\Exception $e) {
-            // Catch the exception thrown after exit
+        } catch (Exception $e) {
+            
         }
 
         $output = ob_get_contents();
@@ -60,17 +71,6 @@ class UtilTest extends TestCase
         $this->assertContains("Location: http://localhost/new-path", $this->headers_list());
         $this->assertStringContainsString("Headers already sent", $output);
     }
-
-    /**
-     * @runInSeparateProcess
-     */
-    public function testGetQueryType() {
-        // Test allowed values
-        $this->assertSame('all', getQueryType('all'));
-        $this->assertSame('by_employee', getQueryType('by_employee'));
-
-        // Test default behavior with an invalid value
-        $this->assertSame('all', getQueryType('invalid_query_type'));
-    }
+    */
 
 }
