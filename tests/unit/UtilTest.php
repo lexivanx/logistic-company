@@ -1,9 +1,9 @@
 <?php
 use PHPUnit\Framework\TestCase;
 
-require_once __DIR__ . '/../../inlcudes/authentication.php';
-require_once __DIR__ . '/../../inlcudes/http.php';
-require_once __DIR__ . '/../../inlcudes/queries.php';
+require_once __DIR__ . '/../../includes/authentication.php';
+require_once __DIR__ . '/../../includes/http.php';
+require_once __DIR__ . '/../../includes/queries.php';
 
 class UtilTest extends TestCase
 {
