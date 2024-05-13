@@ -19,6 +19,9 @@ class UtilTest extends TestCase
         parent::tearDown();
     }
 
+    /**
+     * @runInSeparateProcess
+     */
     public function testCheckAuthentication() {
         // Ensure it returns false when the session variable is not set
         $this->assertFalse(checkAuthentication());
@@ -32,7 +35,9 @@ class UtilTest extends TestCase
         $this->assertFalse(checkAuthentication());
     }
 
-
+    /**
+     * @runInSeparateProcess
+     */
     public function testRedirectToPath() {
         $this->expectOutputRegex('/Headers already sent/');
     
@@ -51,7 +56,9 @@ class UtilTest extends TestCase
         ob_end_clean(); // Clean up the new buffer
     }
     
-
+    /**
+     * @runInSeparateProcess
+     */
     public function testGetQueryType() {
         // Test allowed values
         $this->assertSame('all', getQueryType('all'));
