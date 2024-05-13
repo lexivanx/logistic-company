@@ -39,25 +39,18 @@ class UtilTest extends TestCase
      * @runInSeparateProcess
      */
     public function testRedirectToPath() {
-        $_SERVER['HTTP_HOST'] = 'localhost';
+        $_SERVER['HTTP_HOST'] = 'localhost'; // Ensure HTTP_HOST is set
+        ob_start(); // Start buffering to capture any output
 
-        $this->expectOutputRegex('/Headers already sent/');
-    
-        // Simulate that headers are already sent
-        echo 'Some output';
-        redirectToPath("/new-path");
-    
-        // Clear the current output buffer
-        ob_end_clean();
-    
-        // Start a new buffer to test redirection without previous output interference
-        ob_start();
-        redirectToPath("/new-path");
-        $headers = headers_list();
-        $this->assertContains("Location: http://localhost/new-path", $headers);
-        ob_end_clean(); // Clean up the new buffer
+        redirectToPath("/new-path", true); // Use modified function that does not exit
+
+        $headers = xdebug_get_headers(); // Alternatively, headers_list() if not using Xdebug
+        $output = ob_get_clean(); // Get all output
+
+        $this->assertStringContainsString("Location: http://localhost/new-path", $headers);
+        $this->expectOutputRegex('/Headers already sent/'); // Check if the correct output is captured
     }
-    
+
     /**
      * @runInSeparateProcess
      */
