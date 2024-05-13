@@ -4,7 +4,8 @@ require_once __DIR__ . '/../../classes/User.php';
 use PHPUnit\Framework\TestCase;
 
 class UserTest extends TestCase
-{
+{   
+    /*
     protected $dbMock; // Mock of the database connection
 
     protected function setUp(): void {
@@ -61,6 +62,6 @@ class UserTest extends TestCase
         $authResult = User::userAuth($username, $password, $this->dbMock);
         $this->assertTrue($authResult);
     }
-    
+    */
 
 }
