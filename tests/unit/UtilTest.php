@@ -8,14 +8,14 @@ require_once __DIR__ . '/../../includes/queries.php';
 class UtilTest extends TestCase
 {
     protected function setUp(): void {
+        ob_start();
+        session_start();
         parent::setUp();
-        if (!session_id()) {
-            session_start();
-        }
     }
 
     protected function tearDown(): void {
-        session_destroy();
+        session_write_close();
+        ob_end_clean();
         parent::tearDown();
     }
 
@@ -35,19 +35,22 @@ class UtilTest extends TestCase
 
     public function testRedirectToPath() {
         $this->expectOutputRegex('/Headers already sent/');
-
+    
         // Simulate that headers are already sent
         echo 'Some output';
         redirectToPath("/new-path");
-
-        // Clear the output buffer and test redirection
+    
+        // Clear the current output buffer
         ob_end_clean();
-
-        // We use headers_list() to inspect the headers and expect redirection
+    
+        // Start a new buffer to test redirection without previous output interference
+        ob_start();
         redirectToPath("/new-path");
         $headers = headers_list();
         $this->assertContains("Location: http://localhost/new-path", $headers);
+        ob_end_clean(); // Clean up the new buffer
     }
+    
 
     public function testGetQueryType() {
         // Test allowed values
