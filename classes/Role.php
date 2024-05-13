@@ -26,7 +26,7 @@ class Role {
     ## Add or update(if id is specified)
     public static function handleRole($db, $role_name, $user_id, $role_id = null) {
         if (empty($role_id)) {
-            // Add new role
+            ## Add new role
             if (empty($role_name) || empty($user_id)) {
                 echo "Error: Role name and user ID are required.";
                 return;
@@ -35,7 +35,7 @@ class Role {
             $stmt = mysqli_prepare($db, $sql);
             mysqli_stmt_bind_param($stmt, "si", $role_name, $user_id);
         } else {
-            // Update existing role
+            ## Update existing role
             $sql = "UPDATE role SET role_name = ?, user_id = ? WHERE id = ?";
             $stmt = mysqli_prepare($db, $sql);
             mysqli_stmt_bind_param($stmt, "sii", $role_name, $user_id, $role_id);

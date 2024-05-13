@@ -77,10 +77,6 @@ footer {
     text-decoration: none;
 }
 
-.no-articles {
-    color: #cc0000;
-}
-
 a {
     color: #0066cc;
     text-decoration: none;
@@ -91,7 +87,7 @@ a:hover {
     color: #0044aa; 
 }
 
-article h3 a {
+h3 a {
     color: #333;
     text-decoration: underline; 
     font-size: 1.2em; 
@@ -132,22 +128,6 @@ button[type="submit"] {
     color: #28a745;
 }
 
-article {
-    background: #fff;
-    padding: 20px;
-    margin-bottom: 20px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-article h3 {
-    margin-top: 0;
-}
-
-article p {
-    color: #555;
-}
-
 a.edit-link, a.delete-link {
     color: #f0ad4e; 
     margin-right: 10px;
@@ -155,11 +135,6 @@ a.edit-link, a.delete-link {
 
 a.delete-link {
     color: #d9534f;
-}
-
-article:hover a.edit-link,
-article:hover a.delete-link {
-    display: inline;
 }
 
 a.edit-link:hover, a.delete-link:hover {
@@ -181,7 +156,6 @@ h4 {
     font-size: 1.4em;
 }
 
-/* General Text Styling */
 .shipment-details {
     max-width: 600px;
     margin: 20px auto;
@@ -190,96 +164,85 @@ h4 {
     border: 1px solid #ddd;
 }
 .shipment-details p, .shipment-details label {
-    color: #555; /* Gray text for better readability, consistent with the form */
-    font-size: 1em; /* Ensuring text size is consistent */
-    margin-bottom: 8px; /* Uniform spacing between lines */
+    color: #555;
+    font-size: 1em;
+    margin-bottom: 8px;
 }
 
-/* Styling for Div Containers in Shipment Details */
 .shipment-details div {
-    background: #f9f9f9; /* Light gray background, similar to form background */
-    padding: 10px; /* Padding for spacing inside divs */
-    margin-bottom: 10px; /* Margin for spacing between divs */
-    border: 1px solid #ddd; /* Subtle border to match the form style */
+    background: #f9f9f9;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
 }
 
-/* Enhancements to Form and Button Elements */
 .shipment-details form {
     padding: 20px;
-    background: #f9f9f9; /* Consistent background with input forms */
-    border: 1px solid #ddd; /* Consistent border styling */
+    background: #f9f9f9; 
+    border: 1px solid #ddd; 
 }
 
 .shipment-details button[type="submit"], .shipment-details a {
-    background: #5cb85c; /* Green background for buttons and links */
-    color: white; /* White text for readability */
-    text-decoration: none; /* Removing underline from links */
-    padding: 10px 15px; /* Adequate padding for clickability */
-    display: inline-block; /* Ensures that elements are properly aligned inline */
-    border: none; /* No border for a cleaner look */
-    cursor: pointer; /* Cursor to indicate clickable */
-    margin-right: 10px; /* Space between buttons and links */
+    background: #5cb85c; 
+    color: white;
+    text-decoration: none; 
+    padding: 10px 15px; 
+    display: inline-block; 
+    border: none; 
+    cursor: pointer; 
+    margin-right: 10px; 
 }
 
 .shipment-details button[type="submit"]:hover, .shipment-details a:hover {
-    background: #449d44; /* Darker green on hover for better user feedback */
+    background: #449d44; 
 }
 
-/* Error Message Styling */
 .shipment-details .error-message {
-    color: #cc0000; /* Red color for errors */
-    text-align: center; /* Centering error messages */
-    margin: 10px 0; /* Spacing around the message */
+    color: #cc0000;
+    text-align: center;
+    margin: 10px 0; 
 }
 
-/* Styling Links as Buttons for Consistency */
 .shipment-details a.edit-link, .shipment-details a.delete-link {
-    background: #f0ad4e; /* Orange background for edit links */
-    padding: 10px 15px; /* Uniform padding */
+    background: #f0ad4e;
+    padding: 10px 15px; 
 }
 
 .shipment-details a.delete-link {
-    background: #d9534f; /* Red background for delete links */
+    background: #d9534f; 
 }
 
 .cancel-link {
-    display: block;             /* Use block to ensure it fills the container */
-    padding: 12px;              /* Match padding of the button, adjust as needed */
-    background-color: #d9534f;  /* Red background, same as previous */
-    color: white;               /* White text */
-    text-align: center;         /* Center the text */
-    text-decoration: none;      /* No underline */
-    border: none;               /* No border unless your button has one */
-    border-radius: 4px;         /* Match the button's border-radius */
+    display: block;          
+    padding: 12px;            
+    background-color: #d9534f;  
+    color: white;            
+    text-align: center;      
+    text-decoration: none;     
+    border: none;             
+    border-radius: 4px;      
     font-size: 16px;  
 }
 
 a.cancel-link {
-    background: #e2534e; /* Red background for delete links */
+    background: #e2534e; 
 }
 
 a.cancel-link:hover {
-    background: #d30e07; /* Red background for delete links */
+    background: #d30e07;
 }
 
 button.light-green-hover:hover {
-    background: #449d44; /* Darker green on hover for better user feedback */
+    background: #449d44;
 }
 
 .button-container {
-    width: 90%; /* Adjust based on your layout */
-    margin: auto; /* Centering the button */
+    width: 90%;
+    margin: auto;
 }
 
-/* Handling Display of Elements on Hover */
-.shipment-details article:hover a.edit-link,
-.shipment-details article:hover a.delete-link {
-    display: inline; /* Ensure links are visible on hover */
-}
-
-/* Adjusting Header Elements for Consistency */
 .shipment-details h3 {
-    color: #333; /* Dark gray for headers */
-    font-size: 1.4em; /* Slightly larger font size for headers */
-    margin-bottom: 10px; /* Space below headers */
+    color: #333;
+    font-size: 1.4em;
+    margin-bottom: 10px;
 }

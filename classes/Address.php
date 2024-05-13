@@ -81,6 +81,7 @@ class Address{
         }
     }
 
+    ### Function to fetch all addresses and display them in paragraphs
     public static function fetchAllAddresses($db_connection) {
         $sql_query = "SELECT * FROM address";
         $result = mysqli_query($db_connection, $sql_query);
@@ -91,6 +92,7 @@ class Address{
         }
     }
 
+    ### Set a location type of an address to office
     public static function setLocationTypeToOffice($db_connection, $address_id) {
         $sql_query = "UPDATE address SET location_type = 'office' WHERE id = ?";
         $prepared_query = mysqli_prepare($db_connection, $sql_query);

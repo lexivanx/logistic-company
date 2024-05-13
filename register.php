@@ -88,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <div>
     <label for="full_name">Full name</label>
-    <input type="text" name="full_name" id="full_name">
+    <input type="text" name="full_name" id="full_name" placeholder="Unique full name" value="<?= isset($_POST['username']) ? htmlspecialchars($_POST['full_name'], ENT_QUOTES, 'UTF-8') : ''; ?>">
 </div>
 
 <button type="submit">Register</button>

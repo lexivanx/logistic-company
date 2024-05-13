@@ -77,7 +77,7 @@ class Office {
         }
     }
 
-    ## For admins - print all offices
+    ## For admins - fetch and display all offices in paragraphs
     public static function fetchAllOffices($db) {
         $sql = "SELECT o.id, o.office_name, c.company_name, o.address_id FROM office o JOIN company c ON o.company_id = c.id";
         $result = mysqli_query($db, $sql);

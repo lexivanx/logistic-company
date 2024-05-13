@@ -49,7 +49,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $registeredByUserId = $_SESSION['user_id'];
     $exactPrice = $_POST['exact_price'];
     $delivery_contact_info = $_POST['delivery_contact_info'];
-    $isPaid = isset($_POST['is_paid']) ? 1 : 0; // checkbox
+    ## Checkbox for paid status
+    $isPaid = isset($_POST['is_paid']) ? 1 : 0;
 
     $from_country = $_POST['from_country'];
     $from_city = $_POST['from_city'];
@@ -65,7 +66,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $deliver_from_full_name = $_SESSION['full_name'];
     }
 
-    // Check for errors in form
+    ## Check for errors in form
     $errors = Shipment::getShipmentErrs($shipWeight, $passengerAmount);
     $errors_names = User::getUserShipmentErrs($deliver_from_full_name, $deliver_to_full_name, $deliverer_employee_name, $db_connection);
     $errors_from_address = Address::getAddressErrs('Source', $_POST['from_country'], $_POST['from_city'], $_POST['from_street'], $_POST['from_street_number']);

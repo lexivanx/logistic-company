@@ -28,7 +28,7 @@ class Shipment {
     public static function getShipmentErrs($shipWeight, $passengerAmount) {
         $errors = [];
         
-        // Shipment required fields
+        ## Shipment required fields
         if ($shipWeight != 0.00 && $passengerAmount != 0) {
             $errors[] = "Can't set both shipment weight and passenger amount!";
         }

@@ -24,7 +24,8 @@ class User {
                 return password_verify($password, $user['password']);
             }
         }
-        return false; // Return false if no user is found or on error
+        ## Return false if no user is found or on error
+        return false; 
     }
 
     ### Return user id by username
@@ -124,7 +125,7 @@ class User {
             echo "Error preparing statement: " . mysqli_error($db_connection);
             return null;
         } else {
-            // Bind user_id and execute query
+            ## Bind user_id and execute query
             mysqli_stmt_bind_param($prepared_query, "i", $user_id);
             mysqli_stmt_execute($prepared_query);
 
@@ -192,7 +193,7 @@ class User {
         return mysqli_fetch_all($result, MYSQLI_ASSOC);
     }
 
-    ## Update user
+    ## Update user depending on the parameters passed (if null don't update that field)
     public static function updateUser($db, $user_id, $password = null, $office_id = null) {
         if (empty($user_id)) {
             echo "Error: User ID is required.";

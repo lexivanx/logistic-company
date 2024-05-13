@@ -12,10 +12,10 @@ $db_connection = getDB();
 
 if (checkAuthentication()) {
 
-    // Check for the query type parameter in the URL
+    ## Check for the query type parameter in the URL
     $queryType = isset($_GET['query']) ? getQueryType($_GET['query']) : 'all';
 
-    // IDs from the GET parameters
+    ## IDs from the GET parameters
     $query_registered_by_user_id = isset($_GET['registered_by_user_id']) ? (int)$_GET['registered_by_user_id'] : null;
     $query_deliver_from_user_id = isset($_GET['deliver_from_user_id']) ? (int)$_GET['deliver_from_user_id'] : null;
     $query_deliver_to_user_id = isset($_GET['deliver_to_user_id']) ? (int)$_GET['deliver_to_user_id'] : null;
