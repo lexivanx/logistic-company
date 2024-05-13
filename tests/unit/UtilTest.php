@@ -39,6 +39,8 @@ class UtilTest extends TestCase
      * @runInSeparateProcess
      */
     public function testRedirectToPath() {
+        $_SERVER['HTTP_HOST'] = 'localhost';
+
         $this->expectOutputRegex('/Headers already sent/');
     
         // Simulate that headers are already sent
